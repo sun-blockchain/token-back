@@ -11,5 +11,8 @@
     "solc": "^0.5.8",
     "truffle": "^5.0.1",
     "tslib": "^1.13.0"
+  },
+  "scripts": {
+    "all": "npx truffle migrate --network testnet reset && npx truffle exec scripts/setup.js --network testnet"
   }
 }

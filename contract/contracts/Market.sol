@@ -8,8 +8,9 @@ contract Market {
         bool isSelling;
     }
 
-    address public point;
-    address public manager;
+    Point public pointContract;
+    address public managerAddress;
+    uint256 public rate;
 
     uint256[] public sellingItems;
     Item[] public items;
@@ -22,7 +23,7 @@ contract Market {
     event Sell(uint256 id, uint256 price, address owner);
 
     modifier onlyManager() {
-        require(msg.sender == manager, "Must be manager");
+        require(msg.sender == managerAddress, "Must be manager");
         _;
     }
 
@@ -37,9 +38,33 @@ contract Market {
         _;
     }
 
+    modifier pointContractMustExist() {
+        require(
+            address(pointContract) != address(0),
+            "Point contract must exist!"
+        );
+        _;
+    }
+
     //FUNCTION
     constructor() public {
-        manager = msg.sender;
+        managerAddress = msg.sender;
+    }
+
+    function setPointContract(address _pointContractAddress)
+        public
+        onlyManager
+    {
+        require(
+            _pointContractAddress != address(0),
+            "Point contract address must not be null address!"
+        );
+
+        pointContract = Point(_pointContractAddress);
+    }
+
+    function setRate(uint256 _rate) public onlyManager {
+        rate = _rate;
     }
 
     function getItemById(uint256 _id)
@@ -66,12 +91,22 @@ contract Market {
         emit Sell(items.length - 1, _price, _owner);
     }
 
-    function buy(uint256 _id) public payable itemInList(_id) itemOnSale(_id) {
+    function buy(uint256 _id)
+        public
+        payable
+        itemInList(_id)
+        itemOnSale(_id)
+        pointContractMustExist
+    {
         Item storage item = items[_id];
         require(msg.value >= item.price, "Must have enough money");
         item.isSelling = false;
         buyerItems[msg.sender].push(_id);
         removeFromSellingItem(_id);
+
+        // calculate and back point
+        uint256 pointAmount = (rate * item.price) / 1000;
+        pointContract.mint(msg.sender, pointAmount);
     }
 
     /** Remove item in sellingItems when it was bought
