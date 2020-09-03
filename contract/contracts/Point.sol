@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Pausable.sol";
  * @title Point
  **/
 
-contract Point is ERC20Mintable, ERC20Burnable, ERC20Detailed {
+contract Point is ERC20Mintable, ERC20Burnable, ERC20Detailed, ERC20Pausable {
     constructor(string memory _symbol)
         public
         ERC20Detailed(_symbol, _symbol, 18)
