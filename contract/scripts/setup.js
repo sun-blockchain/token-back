@@ -75,9 +75,27 @@ module.exports = async () => {
       .catch(error => {
         console.log('Setup minter error', error);
       });
+
+    const txnPause = hmy.transactions.newTx({
+      to: pointAddress
+    });
+
+    await point.wallet.signTransaction(txnPause);
+    await point.methods
+      .pause()
+      .send(options)
+      .then(result => {
+        // console.log(result);
+        console.log('Pause successfully!');
+      })
+      .catch(error => {
+        console.log('Pause error', error);
+      });
+
+    console.log('ALL SETUP SUCCESSFULLY!');
     process.exit();
   } catch (error) {
-    console.log('Setup minter failed!: ', error);
+    console.log('SETUP FAILED!: ', error);
     process.exit();
   }
 };
