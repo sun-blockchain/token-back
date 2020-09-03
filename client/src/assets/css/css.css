@@ -3,7 +3,8 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: local('Fira Sans SemiBold'), local('FiraSans-SemiBold'), url(../fonts/va9B4kDNxMZdWfMOD5VnSKzeRhf_.ttf) format('truetype');
+  src: local('Fira Sans SemiBold'), local('FiraSans-SemiBold'),
+    url(../fonts/va9B4kDNxMZdWfMOD5VnSKzeRhf_.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Heebo';
