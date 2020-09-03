@@ -1,7 +1,7 @@
 <template>
   <div class="rn">
     <header class="nb reveal-from-top">
-      <div class="tcontainern">
+      <div class="tcontainern opacity-0">
         <div class="n_">
           <div class="nk">
             <h1 class="sz">
@@ -18,9 +18,9 @@
             <div class="nq">
               <ul class="st re">
                 <li>
-                  <a class="tbuttonn fbuttonl gbuttony sbuttono" href="#">
+                  <router-link to="/markets" class="tbuttonn fbuttonl gbuttony sbuttono">
                     Markets
-                  </a>
+                  </router-link>
                 </li>
               </ul>
               <ul class="st h re">
@@ -33,7 +33,7 @@
     </header>
     <main class="nw">
       <section class="rb nx tillustration-section-n">
-        <div class="tcontainern">
+        <div class="tcontainern opacity-0">
           <div class="rm rd">
             <div class="nf np">
               <div class="split-item">
@@ -46,9 +46,9 @@
                     and you can do whatever you want.
                   </p>
                   <div class="reveal-from-bottom" data-reveal-delay="450">
-                    <a class="tbuttonn fbuttonl gbuttony" href="#">
+                    <router-link to="/markets" class="tbuttonn fbuttonl gbuttony">
                       Get started now
-                    </a>
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -57,7 +57,7 @@
         </div>
       </section>
       <section class="if nx reveal-fade">
-        <div class="tcontainern">
+        <div class="tcontainern opacity-0">
           <div class="il rd i_ sk">
             <ul class="st">
               <li class="reveal-from-top">
@@ -81,7 +81,7 @@
       </section>
     </main>
     <footer class="rr az">
-      <div class="tcontainern">
+      <div class="tcontainern opacity-0">
         <div class="ri">
           <div class="rs rh h">
             <div class="nk">
@@ -167,15 +167,35 @@
 <script>
 export default {
   name: 'Home',
-  components: {}
+  components: {},
+  mounted() {
+    setTimeout(() => {
+      var element = document.querySelectorAll('.tcontainern');
+      for (let i = 0; i < element.length; i++) {
+        element[i].classList.add('a-opacity-1');
+      }
+    }, 500);
+  }
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 @import '../assets/css/home-style.css';
 @media (min-width: 641px) {
   .rb .nf .split-item {
     min-height: 492px;
   }
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.a-opacity-1 {
+  opacity: 1;
+  transform: translate(0);
+  transition: opacity 1s cubic-bezier(0.39, 0.575, 0.565, 1),
+    transform 1s cubic-bezier(0.39, 0.575, 0.565, 1),
+    -webkit-transform 1s cubic-bezier(0.39, 0.575, 0.565, 1);
 }
 </style>
