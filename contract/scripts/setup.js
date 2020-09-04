@@ -20,6 +20,7 @@ const pointAddress = pointJson.networks['2'].address;
 const marketAddress = marketJson.networks['2'].address;
 
 const rate = 86;
+const interestRate = 2;
 
 module.exports = async () => {
   try {
@@ -54,6 +55,17 @@ module.exports = async () => {
       })
       .catch(error => {
         console.log('Setup rate error', error);
+      });
+
+    await market.methods
+      .setInterestRate(interestRate)
+      .send(options)
+      .then(result => {
+        // console.log(result);
+        console.log('Setup interest rate successfully!');
+      })
+      .catch(error => {
+        console.log('Setup interest rate error', error);
       });
 
     // Add Market Contract Address to Point'miters array

@@ -33,6 +33,8 @@ contract Market {
     /** emitted when a new item is sell in Market
      */
     event Sell(uint256 id, uint256 price, address owner);
+    event Buy(uint256 id, uint256 price);
+    event WithdrawStake(uint256 amount);
 
     modifier onlyManager() {
         require(msg.sender == managerAddress, "Must be manager");
@@ -81,6 +83,23 @@ contract Market {
 
     function setInterestRate(uint256 _interestRate) public onlyManager {
         interestRate = _interestRate;
+    }
+
+    function getAllItems()
+        public
+        view
+        returns (uint256[] memory, bool[] memory)
+    {
+        uint256[] memory price = new uint256[](items.length);
+        bool[] memory isSelling = new bool[](items.length);
+
+        for (uint256 i = 0; i < items.length; i++) {
+            Item storage item = items[i];
+            price[i] = item.price;
+            isSelling[i] = item.isSelling;
+        }
+
+        return (price, isSelling);
     }
 
     function getItemById(uint256 _id)
@@ -133,6 +152,60 @@ contract Market {
         // calculate and back point
         uint256 pointAmount = (rate * item.price) / 1000;
         pointContract.mint(msg.sender, pointAmount);
+
+        emit Buy(_id, item.price);
+    }
+
+    function getWithdrawableStake(address account)
+        public
+        view
+        returns (uint256)
+    {
+        Balance storage balance = userBalance[account];
+        uint256 currentPoint = pointContract.balanceOf(account);
+
+        uint256 withdrawableStake = balance.currentFund +
+            (((block.timestamp - balance.timeStart) / (1 days)) *
+                interestRate *
+                currentPoint) /
+            100;
+        return withdrawableStake;
+    }
+
+    function withdrawStake(uint256 amount)
+        public
+        payable
+        pointContractMustExist
+    {
+        uint256 marketBalance = address(this).balance;
+        require(
+            marketBalance >= amount,
+            "Market balance have not enough to withdraw!"
+        );
+
+        Balance storage balance = userBalance[msg.sender];
+        uint256 currentPoint = pointContract.balanceOf(msg.sender);
+
+        uint256 withdrawableStake = balance.currentFund +
+            (((block.timestamp - balance.timeStart) / (1 days)) *
+                interestRate *
+                currentPoint) /
+            100;
+
+        require(
+            withdrawableStake >= amount,
+            "Withdraw must be less or equal amount of money in stake!"
+        );
+
+        balance.currentFund = withdrawableStake - amount;
+        balance.timeStart = block.timestamp;
+
+        pointContract.burnFrom(
+            msg.sender,
+            (currentPoint * amount) / withdrawableStake
+        );
+        msg.sender.transfer(amount);
+        emit WithdrawStake(amount);
     }
 
     /** Remove item in sellingItems when it was bought
