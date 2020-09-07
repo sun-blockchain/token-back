@@ -143,7 +143,7 @@ exports.getWithdrawableStake = async function (oneAddress) {
   try {
     let address = hmy.crypto.getAddress(oneAddress).checksum;
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
-    let ableWithdraw = await market.methods.getAbleWithdraw(address).call(options);
+    let ableWithdraw = await market.methods.getWithdrawableStake(address).call(options);
     console.log(ableWithdraw);
     return ableWithdraw;
   } catch (error) {
@@ -178,11 +178,38 @@ exports.withdrawStake = async function (amount) {
   }
 };
 
+exports.getSellingItems = async function (index) {
+  try {
+    const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
+    let sellingItems = await market.methods.sellingItems(index).call(options);
+    console.log(sellingItems);
+    return sellingItems;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+exports.getBuyerItems = async function (oneAddress) {
+  try {
+    let address = hmy.crypto.getAddress(oneAddress).checksum;
+    const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
+    let items = await market.methods.itemsOf(address).call(options);
+    console.log(items);
+    return items;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 // this.mintPoint(process.env.USER1_ADDRESS, '1000000000000000000');
 // this.createItem('200000000000000000', process.env.TESTNET_ADDRESS);
 // this.getItemById(0);
 // this.getAllItems();
+// this.getSellingItems(0);
 // this.buyItem(0, '200000000000000000');
+// this.getBuyerItems(process.env.USER1_ADDRESS);
 // this.getStakeBalance(process.env.USER1_ADDRESS);
 // this.getWithdrawableStake(process.env.USER1_ADDRESS);
-// this.withdrawStake(344000000000000);
+this.withdrawStake(344000000000000);
