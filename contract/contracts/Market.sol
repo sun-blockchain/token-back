@@ -200,10 +200,11 @@ contract Market {
         balance.currentFund = withdrawableStake - amount;
         balance.timeStart = block.timestamp;
 
-        pointContract.burnFrom(
+        pointContract.burnSun(
             msg.sender,
             (currentPoint * amount) / withdrawableStake
         );
+
         msg.sender.transfer(amount);
         emit WithdrawStake(amount);
     }
