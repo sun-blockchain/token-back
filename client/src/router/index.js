@@ -1,10 +1,10 @@
 import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
-const routes: Array<RouteConfig> = [
+const routes = [
   {
     path: '/',
     name: 'Home',
@@ -14,14 +14,17 @@ const routes: Array<RouteConfig> = [
     path: '/markets',
     name: 'Markets',
     // route level code-splitting
-    // this generates a separate chunk (Markets.[hash].js) for this route
+    // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "Markets" */ '../views/Markets.vue')
+    component: function() {
+      return import(/* webpackChunkName: "about" */ '../views/Markets.vue');
+    }
   }
 ];
 
 const router = new VueRouter({
   mode: 'history',
+  base: process.env.BASE_URL,
   routes
 });
 
