@@ -165,6 +165,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'Home',
   components: {},
@@ -175,6 +176,10 @@ export default {
         element[i].classList.add('a-opacity-1');
       }
     }, 500);
+    // window.addEventListener('load', () => this.signOutWallet());
+  },
+  methods: {
+    // ...mapActions(['signInWallet', 'signOutWallet'])
   }
 };
 </script>
