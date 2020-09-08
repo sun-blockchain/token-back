@@ -27,11 +27,11 @@ exports.mintPoint = async function (oneAddress, amount) {
     const point = hmy.contracts.createContract(pointJson.abi, pointAddress);
     point.wallet.addByPrivateKey(process.env.TESTNET_PRIVATE_KEY);
 
-    const txnMint = hmy.transactions.newTx({
+    const mintTx = hmy.transactions.newTx({
       to: pointAddress
     });
 
-    await point.wallet.signTransaction(txnMint);
+    await point.wallet.signTransaction(mintTx);
     await point.methods
       .mint(address, amount)
       .send(options)
@@ -54,11 +54,11 @@ exports.createItem = async function (price, oneAddress) {
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
     market.wallet.addByPrivateKey(process.env.TESTNET_PRIVATE_KEY);
 
-    const txnSell = hmy.transactions.newTx({
+    const sellTx = hmy.transactions.newTx({
       to: marketAddress
     });
 
-    await market.wallet.signTransaction(txnSell);
+    await market.wallet.signTransaction(sellTx);
     await market.methods
       .sell(price, address)
       .send(options)
@@ -104,11 +104,11 @@ exports.buyItem = async function (itemId, price) {
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
     market.wallet.addByPrivateKey(process.env.USER1_PRIVATE_KEY);
 
-    const txnBuy = hmy.transactions.newTx({
+    const buyTx = hmy.transactions.newTx({
       to: marketAddress
     });
 
-    await market.wallet.signTransaction(txnBuy);
+    await market.wallet.signTransaction(buyTx);
     await market.methods
       .buy(itemId)
       .send({ ...options, value: price })
@@ -157,10 +157,10 @@ exports.withdrawStake = async function (amount) {
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
     market.wallet.addByPrivateKey(process.env.USER1_PRIVATE_KEY);
 
-    const txnWithdraw = hmy.transactions.newTx({
+    const withdrawTx = hmy.transactions.newTx({
       to: marketAddress
     });
-    await market.wallet.signTransaction(txnWithdraw);
+    await market.wallet.signTransaction(withdrawTx);
     await market.methods
       .withdrawStake(amount)
       .send(options)
@@ -203,6 +203,31 @@ exports.getBuyerItems = async function (oneAddress) {
   }
 };
 
+exports.setupItems = async function (items) {
+  const address = hmy.crypto.getAddress(process.env.TESTNET_ADDRESS).checksum;
+  const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
+  market.wallet.addByPrivateKey(process.env.TESTNET_PRIVATE_KEY);
+
+  const sellTx = hmy.transactions.newTx({
+    to: marketAddress
+  });
+  await market.wallet.signTransaction(sellTx);
+
+  for (let i = 0; i < items.length; i++) {
+    await market.methods
+      .sell(items[i], address)
+      .send(options)
+      .then(result => {
+        // console.log(result);
+        console.log(`Sell items[${i}] successfully!`);
+      })
+      .catch(error => {
+        throw Error(`Sell items[${i}] `, error);
+      });
+  }
+  return;
+};
+
 // this.mintPoint(process.env.USER1_ADDRESS, '1000000000000000000');
 // this.createItem('200000000000000000', process.env.TESTNET_ADDRESS);
 // this.getItemById(0);
@@ -212,4 +237,4 @@ exports.getBuyerItems = async function (oneAddress) {
 // this.getBuyerItems(process.env.USER1_ADDRESS);
 // this.getStakeBalance(process.env.USER1_ADDRESS);
 // this.getWithdrawableStake(process.env.USER1_ADDRESS);
-this.withdrawStake(344000000000000);
+// this.withdrawStake(344000000000000);
