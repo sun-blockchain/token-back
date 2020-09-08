@@ -12,19 +12,23 @@
           </div>
           <button id="th" class="th" aria-controls="primary-menu" aria-expanded="false">
             <span class="se">Menu</span>
-            <span class="tp"><span class="td"></span></span>
+            <span class="tp">
+              <span class="td"></span>
+            </span>
           </button>
           <nav id="nj" class="nj">
             <div class="nq">
               <ul class="st re">
                 <li>
-                  <router-link to="/markets" class="tbuttonn fbuttonl gbuttony sbuttono">
-                    Markets
-                  </router-link>
+                  <router-link to="/markets" class="tbuttonn fbuttonl gbuttony sbuttono"
+                    >Markets</router-link
+                  >
                 </li>
               </ul>
               <ul class="st h re">
-                <li><a href="#">My Account</a></li>
+                <li>
+                  <a href="#">My Account</a>
+                </li>
               </ul>
             </div>
           </nav>
@@ -46,9 +50,9 @@
                     and you can do whatever you want.
                   </p>
                   <div class="reveal-from-bottom" data-reveal-delay="450">
-                    <router-link to="/markets" class="tbuttonn fbuttonl gbuttony">
-                      Get started now
-                    </router-link>
+                    <router-link to="/markets" class="tbuttonn fbuttonl gbuttony"
+                      >Get started now</router-link
+                    >
                   </div>
                 </div>
               </div>
@@ -148,15 +152,21 @@
           <div class="ro rh h rp">
             <nav class="rc">
               <ul class="st">
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">About us</a></li>
-                <li><a href="#">FAQ's</a></li>
-                <li><a href="#">Support</a></li>
+                <li>
+                  <a href="#">Contact</a>
+                </li>
+                <li>
+                  <a href="#">About us</a>
+                </li>
+                <li>
+                  <a href="#">FAQ's</a>
+                </li>
+                <li>
+                  <a href="#">Support</a>
+                </li>
               </ul>
             </nav>
-            <div class="footer-copyright">
-              © 2020 - Blockchain Research Team - Sun-Asterisk
-            </div>
+            <div class="footer-copyright">© 2020 - Blockchain Research Team - Sun-Asterisk</div>
           </div>
         </div>
       </div>
@@ -169,7 +179,7 @@ import { mapActions } from 'vuex';
 export default {
   name: 'Home',
   components: {},
-  mounted() {
+  async mounted() {
     setTimeout(() => {
       var element = document.querySelectorAll('.tcontainern');
       for (let i = 0; i < element.length; i++) {
@@ -177,9 +187,11 @@ export default {
       }
     }, 500);
     // window.addEventListener('load', () => this.initMarket());
+    await this.initMarket();
+    await this.fetchSellingItems();
   },
   methods: {
-    // ...mapActions(['signInWallet', 'signOutWallet', 'initMarket'])
+    ...mapActions(['signInWallet', 'signOutWallet', 'initMarket', 'fetchSellingItems'])
   }
 };
 </script>

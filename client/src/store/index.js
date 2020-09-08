@@ -9,9 +9,9 @@ const options = {
   gasPrice: GAS_PRICE,
   gasLimit: GAS_LIMIT
 };
-const hmy = new Harmony('https://api.s0.t.hmny.io', {
-  chainType: ChainType.Harmony,
-  chainId: ChainID.HmyTestnet
+const hmy = new Harmony('https://api.s0.b.hmny.io', {
+  chainID: ChainID.HmyTestnet,
+  chainType: ChainType.Harmony
 });
 
 Vue.use(Vuex);
@@ -20,7 +20,8 @@ export default new Vuex.Store({
   state: {
     mathWallet: null,
     account: null,
-    market: null
+    market: null,
+    sellingItems: []
   },
   mutations: {
     setMathWallet(state, payload) {
@@ -30,8 +31,10 @@ export default new Vuex.Store({
       state.account = payload.account;
     },
     setMarket(state, payload) {
-      console.log('market', payload.market);
       state.market = payload.market;
+    },
+    setSellingItems(state, payload) {
+      state.sellingItems = payload.sellingItems;
     }
   },
   actions: {
@@ -79,13 +82,32 @@ export default new Vuex.Store({
       }
     },
 
-    initMarket({ commit }) {
+    async initMarket({ commit }) {
       let marketAddress = Market.networks[2].address;
       if (marketAddress) {
         let market = hmy.contracts.createContract(Market.abi, marketAddress);
         commit('setMarket', { market });
       } else {
         console.error('Market contract not found');
+      }
+    },
+
+    async fetchSellingItems({ commit, state }) {
+      let market = state.market;
+      if (market) {
+        let sellingItemIds = await market.methods.getSellingItems().call(options);
+        let sellingItems = [];
+        if (sellingItemIds) {
+          sellingItems = await Promise.all(
+            sellingItemIds.map(async (id) => {
+              let item = { id: id.toNumber(), price: null };
+              let itemInfo = await market.methods.getItemById(id).call(options);
+              item.price = itemInfo[0];
+              return item;
+            })
+          );
+        }
+        commit('setSellingItems', { sellingItems });
       }
     }
   },

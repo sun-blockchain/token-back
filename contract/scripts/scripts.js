@@ -35,11 +35,11 @@ exports.mintPoint = async function (oneAddress, amount) {
     await point.methods
       .mint(address, amount)
       .send(options)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log('Mint successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Mint error', error);
       });
   } catch (error) {
@@ -51,6 +51,7 @@ exports.mintPoint = async function (oneAddress, amount) {
 exports.createItem = async function (price, oneAddress) {
   try {
     let address = hmy.crypto.getAddress(oneAddress).checksum;
+    console.log('hmy', address);
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
     market.wallet.addByPrivateKey(process.env.TESTNET_PRIVATE_KEY);
 
@@ -62,11 +63,11 @@ exports.createItem = async function (price, oneAddress) {
     await market.methods
       .sell(price, address)
       .send(options)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log('Sell successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Sell error', error);
       });
   } catch (error) {
@@ -112,11 +113,11 @@ exports.buyItem = async function (itemId, price) {
     await market.methods
       .buy(itemId)
       .send({ ...options, value: price })
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log('Buy successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Buy error', error);
       });
     return;
@@ -164,11 +165,11 @@ exports.withdrawStake = async function (amount) {
     await market.methods
       .withdrawStake(amount)
       .send(options)
-      .then(result => {
+      .then((result) => {
         console.log(result);
         console.log('Withdraw successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Withdraw error', error);
       });
     return;
@@ -178,10 +179,23 @@ exports.withdrawStake = async function (amount) {
   }
 };
 
-exports.getSellingItems = async function (index) {
+exports.getSellingItem = async function (index) {
   try {
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
     let sellingItems = await market.methods.sellingItems(index).call(options);
+    console.log(sellingItems);
+    return sellingItems;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+exports.getSellingItems = async () => {
+  try {
+    const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
+    console.log(market.methods.getSellingItems().call);
+    let sellingItems = await market.methods.getSellingItems().call(options);
     console.log(sellingItems);
     return sellingItems;
   } catch (error) {
@@ -217,11 +231,11 @@ exports.setupItems = async function (items) {
     await market.methods
       .sell(items[i], address)
       .send(options)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log(`Sell items[${i}] successfully!`);
       })
-      .catch(error => {
+      .catch((error) => {
         throw Error(`Sell items[${i}] `, error);
       });
   }
@@ -232,7 +246,8 @@ exports.setupItems = async function (items) {
 // this.createItem('200000000000000000', process.env.TESTNET_ADDRESS);
 // this.getItemById(0);
 // this.getAllItems();
-// this.getSellingItems(0);
+// this.getSellingItem(0);
+// this.getSellingItems();
 // this.buyItem(0, '200000000000000000');
 // this.getBuyerItems(process.env.USER1_ADDRESS);
 // this.getStakeBalance(process.env.USER1_ADDRESS);

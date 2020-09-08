@@ -46,33 +46,33 @@ module.exports = async () => {
     await market.methods
       .setPointContract(pointAddress)
       .send(options)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log('Setup point contract successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Setup point contract error', error);
       });
 
     await market.methods
-      .setRate(rate)
+      .setBuyBackRate(rate)
       .send(options)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log('Setup rate successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Setup rate error', error);
       });
 
     await market.methods
       .setInterestRate(interestRate)
       .send(options)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log('Setup interest rate successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Setup interest rate error', error);
       });
 
@@ -88,11 +88,11 @@ module.exports = async () => {
     await point.methods
       .addMinter(marketAddress)
       .send(options)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log('Setup minter successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Setup minter error', error);
       });
 
@@ -104,11 +104,11 @@ module.exports = async () => {
     await point.methods
       .pause()
       .send(options)
-      .then(result => {
+      .then((result) => {
         // console.log(result);
         console.log('Pause successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('Pause error', error);
       });
 
