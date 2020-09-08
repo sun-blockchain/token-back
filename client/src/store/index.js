@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { Harmony } from '@harmony-js/core';
 import { ChainID, ChainType, fromWei, hexToNumber, Units } from '@harmony-js/utils';
-
+import Market from '@/contracts/Market.json';
 const GAS_LIMIT = 6721900;
 const GAS_PRICE = 1000000000;
 const options = {
@@ -19,7 +19,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     mathWallet: null,
-    account: null
+    account: null,
+    market: null
   },
   mutations: {
     setMathWallet(state, payload) {
@@ -27,6 +28,10 @@ export default new Vuex.Store({
     },
     setAccount(state, payload) {
       state.account = payload.account;
+    },
+    setMarket(state, payload) {
+      console.log('market', payload.market);
+      state.market = payload.market;
     }
   },
   actions: {
@@ -71,6 +76,16 @@ export default new Vuex.Store({
           commit('setAccount', { account: null });
           dispatch('syncLocalStorage', { account: null, mathWallet: null });
         });
+      }
+    },
+
+    initMarket({ commit }) {
+      let marketAddress = Market.networks[2].address;
+      if (marketAddress) {
+        let market = hmy.contracts.createContract(Market.abi, marketAddress);
+        commit('setMarket', { market });
+      } else {
+        console.error('Market contract not found');
       }
     }
   },

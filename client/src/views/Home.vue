@@ -176,10 +176,10 @@ export default {
         element[i].classList.add('a-opacity-1');
       }
     }, 500);
-    // window.addEventListener('load', () => this.signOutWallet());
+    // window.addEventListener('load', () => this.initMarket());
   },
   methods: {
-    // ...mapActions(['signInWallet', 'signOutWallet'])
+    // ...mapActions(['signInWallet', 'signOutWallet', 'initMarket'])
   }
 };
 </script>
