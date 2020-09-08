@@ -203,6 +203,31 @@ exports.getBuyerItems = async function (oneAddress) {
   }
 };
 
+exports.setupItems = async function (items) {
+  const address = hmy.crypto.getAddress(process.env.TESTNET_ADDRESS).checksum;
+  const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
+  market.wallet.addByPrivateKey(process.env.TESTNET_PRIVATE_KEY);
+
+  const txnSell = hmy.transactions.newTx({
+    to: marketAddress
+  });
+  await market.wallet.signTransaction(txnSell);
+
+  for (let i = 0; i < items.length; i++) {
+    await market.methods
+      .sell(items[i], address)
+      .send(options)
+      .then(result => {
+        // console.log(result);
+        console.log(`Sell items[${i}] successfully!`);
+      })
+      .catch(error => {
+        throw Error(`Sell items[${i}] `, error);
+      });
+  }
+  return;
+};
+
 // this.mintPoint(process.env.USER1_ADDRESS, '1000000000000000000');
 // this.createItem('200000000000000000', process.env.TESTNET_ADDRESS);
 // this.getItemById(0);
@@ -212,4 +237,4 @@ exports.getBuyerItems = async function (oneAddress) {
 // this.getBuyerItems(process.env.USER1_ADDRESS);
 // this.getStakeBalance(process.env.USER1_ADDRESS);
 // this.getWithdrawableStake(process.env.USER1_ADDRESS);
-this.withdrawStake(344000000000000);
+// this.withdrawStake(344000000000000);

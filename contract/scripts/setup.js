@@ -2,6 +2,7 @@ const { Harmony } = require('@harmony-js/core');
 const { ChainID, ChainType } = require('@harmony-js/utils');
 const GAS_LIMIT = 6721900;
 const GAS_PRICE = 1000000000;
+const Test = require('./test');
 
 const options = {
   gasLimit: GAS_LIMIT,
@@ -21,6 +22,13 @@ const marketAddress = marketJson.networks['2'].address;
 
 const rate = 86;
 const interestRate = 2;
+const items = [
+  '200000000000000000',
+  '200000000000000000',
+  '200000000000000000',
+  '200000000000000000',
+  '200000000000000000'
+];
 
 module.exports = async () => {
   try {
@@ -103,6 +111,8 @@ module.exports = async () => {
       .catch(error => {
         console.log('Pause error', error);
       });
+
+    await Test.setupItems(items);
 
     console.log('ALL SETUP SUCCESSFULLY!');
     process.exit();
