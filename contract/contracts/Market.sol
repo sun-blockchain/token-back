@@ -20,7 +20,7 @@ contract Market {
 
     Point public pointContract;
     address public managerAddress;
-    uint256 public rate;
+    uint256 public buyBackRate;
     uint256 public interestRate;
 
     uint256[] public sellingItems;
@@ -77,8 +77,8 @@ contract Market {
         pointContract = Point(_pointContractAddress);
     }
 
-    function setRate(uint256 _rate) public onlyManager {
-        rate = _rate;
+    function setBuyBackRate(uint256 _buyBackRate) public onlyManager {
+        buyBackRate = _buyBackRate;
     }
 
     function setInterestRate(uint256 _interestRate) public onlyManager {
@@ -100,6 +100,10 @@ contract Market {
         }
 
         return (price, isSelling);
+    }
+
+    function getSellingItems() public view returns (uint256[] memory) {
+        return sellingItems;
     }
 
     function getItemById(uint256 _id)
@@ -150,7 +154,7 @@ contract Market {
         balance.timeStart = block.timestamp;
 
         // calculate and back point
-        uint256 pointAmount = (rate * item.price) / 1000;
+        uint256 pointAmount = (buyBackRate * item.price) / 1000;
         pointContract.mint(msg.sender, pointAmount);
 
         emit Buy(_id, item.price);

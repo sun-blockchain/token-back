@@ -21,7 +21,7 @@ module.exports = {
   contracts_build_directory: '../client/src/contracts',
   networks: {
     local: {
-      network_id: '2', // Any network (default: none)
+      network_id: '999', // Any network (default: none)
       provider: () => {
         const truffleProvider = new TruffleProvider(
           local_url,
