@@ -20,6 +20,7 @@ export default new Vuex.Store({
   state: {
     mathWallet: null,
     account: null,
+    withdrawableStake: 0,
     market: null,
     sellingItems: []
   },
@@ -29,6 +30,8 @@ export default new Vuex.Store({
     },
     setAccount(state, payload) {
       state.account = payload.account;
+      state.stakeBalance = payload.balance;
+      state.withdrawableStake = payload.withdrawable;
     },
     setMarket(state, payload) {
       state.market = payload.market;
@@ -59,13 +62,21 @@ export default new Vuex.Store({
       );
     },
 
-    signInWallet({ dispatch, commit }) {
+    signInWallet({ dispatch, commit, state }) {
       let isMathWallet = window.harmony && window.harmony.isMathWallet;
       if (isMathWallet) {
         let mathWallet = window.harmony;
-        mathWallet.getAccount().then((account) => {
+        mathWallet.getAccount().then(async account => {
           commit('setMathWallet', { mathWallet });
-          commit('setAccount', { account });
+
+          let market = state.market;
+          let withdrawable = 0;
+          if (market) {
+            let address = hmy.crypto.getAddress(account.address).checksum;
+            withdrawable = await market.methods.getWithdrawableStake(address).call(options);
+          }
+
+          commit('setAccount', { account, withdrawable });
           dispatch('syncLocalStorage', { account: account, sessionType: 'mathWallet' });
         });
       }
@@ -99,7 +110,7 @@ export default new Vuex.Store({
         let sellingItems = [];
         if (sellingItemIds) {
           sellingItems = await Promise.all(
-            sellingItemIds.map(async (id) => {
+            sellingItemIds.map(async id => {
               let item = { id: id.toNumber(), price: null };
               let itemInfo = await market.methods.getItemById(id).call(options);
               item.price = itemInfo[0];
