@@ -35,11 +35,11 @@ exports.mintPoint = async function (oneAddress, amount) {
     await point.methods
       .mint(address, amount)
       .send(options)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log('Mint successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Mint error', error);
       });
   } catch (error) {
@@ -63,11 +63,11 @@ exports.createItem = async function (price, oneAddress) {
     await market.methods
       .sell(price, address)
       .send(options)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log('Sell successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Sell error', error);
       });
   } catch (error) {
@@ -113,11 +113,11 @@ exports.buyItem = async function (itemId, price) {
     await market.methods
       .buy(itemId)
       .send({ ...options, value: price })
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log('Buy successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Buy error', error);
       });
     return;
@@ -165,11 +165,11 @@ exports.withdrawStake = async function (amount) {
     await market.methods
       .withdrawStake(amount)
       .send(options)
-      .then((result) => {
+      .then(result => {
         console.log(result);
         console.log('Withdraw successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Withdraw error', error);
       });
     return;
@@ -231,11 +231,11 @@ exports.setupItems = async function (items) {
     await market.methods
       .sell(items[i], address)
       .send(options)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log(`Sell items[${i}] successfully!`);
       })
-      .catch((error) => {
+      .catch(error => {
         throw Error(`Sell items[${i}] `, error);
       });
   }
