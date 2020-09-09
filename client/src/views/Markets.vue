@@ -10,27 +10,12 @@
           <div class="strip__inner-text">
             <el-row>
               <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
-                <el-card :body-style="{ padding: '0px' }">
-                  <img
-                    src="https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg"
-                    class="image"
-                    @click="dialogTableVisible = true"
-                  />
-                  <div class="bottom-card">
-                    <p>Shirt</p>
-                    <h5>100$</h5>
-                    <div class="bottom clearfix">
-                      <el-input-number
-                        controls-position="right"
-                        :value="0"
-                        :min="0"
-                      ></el-input-number>
-                      <el-button type="primary" class="btn-buy"
-                        ><i class="fa fa-cart-plus" aria-hidden="true"></i
-                      ></el-button>
-                    </div>
-                  </div>
-                </el-card>
+                <ItemComponent
+                  name="Shirt"
+                  :price="120"
+                  itemImg="https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg"
+                  @openTableVisible="openTableVisible"
+                />
               </el-col>
             </el-row>
           </div>
@@ -42,25 +27,12 @@
           <div class="strip__inner-text">
             <el-row>
               <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
-                <el-card :body-style="{ padding: '0px' }">
-                  <img
-                    src="https://cf.shopee.vn/file/80196bdbee4665d42649feb9e66bf169"
-                    class="image"
-                  />
-                  <div style="padding: 14px;">
-                    <p>T-Shirt</p>
-                    <div class="bottom clearfix">
-                      <el-input-number
-                        controls-position="right"
-                        :value="0"
-                        :min="0"
-                      ></el-input-number>
-                      <el-button type="primary" class="btn-buy"
-                        ><i class="fa fa-cart-plus" aria-hidden="true"></i
-                      ></el-button>
-                    </div>
-                  </div>
-                </el-card>
+                <ItemComponent
+                  name="T-shirt"
+                  :price="120"
+                  itemImg="https://cf.shopee.vn/file/80196bdbee4665d42649feb9e66bf169"
+                  @openTableVisible="openTableVisible"
+                />
               </el-col>
             </el-row>
           </div>
@@ -72,25 +44,12 @@
           <div class="strip__inner-text">
             <el-row>
               <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
-                <el-card :body-style="{ padding: '0px' }">
-                  <img
-                    src="https://anninc.scene7.com/is/image/LO/538256_9435?$pdp2x$"
-                    class="image"
-                  />
-                  <div style="padding: 14px;">
-                    <p>Jeans</p>
-                    <div class="bottom clearfix">
-                      <el-input-number
-                        controls-position="right"
-                        :value="0"
-                        :min="0"
-                      ></el-input-number>
-                      <el-button type="primary" class="btn-buy"
-                        ><i class="fa fa-cart-plus" aria-hidden="true"></i
-                      ></el-button>
-                    </div>
-                  </div>
-                </el-card>
+                <ItemComponent
+                  name="Jeans"
+                  :price="120"
+                  itemImg="https://anninc.scene7.com/is/image/LO/538256_9435?$pdp2x$"
+                  @openTableVisible="openTableVisible"
+                />
               </el-col>
             </el-row>
           </div>
@@ -102,25 +61,12 @@
           <div class="strip__inner-text">
             <el-row>
               <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
-                <el-card :body-style="{ padding: '0px' }">
-                  <img
-                    src="https://assets.ajio.com/medias/sys_master/root/h5a/h59/13018715881502/-1117Wx1400H-460342492-blue-MODEL.jpg"
-                    class="image"
-                  />
-                  <div style="padding: 14px;">
-                    <p>Shoes</p>
-                    <div class="bottom clearfix">
-                      <el-input-number
-                        controls-position="right"
-                        :value="0"
-                        :min="0"
-                      ></el-input-number>
-                      <el-button type="primary" class="btn-buy"
-                        ><i class="fa fa-cart-plus" aria-hidden="true"></i
-                      ></el-button>
-                    </div>
-                  </div>
-                </el-card>
+                <ItemComponent
+                  name="Jeans"
+                  :price="120"
+                  itemImg="https://assets.ajio.com/medias/sys_master/root/h5a/h59/13018715881502/-1117Wx1400H-460342492-blue-MODEL.jpg"
+                  @openTableVisible="openTableVisible"
+                />
               </el-col>
             </el-row>
           </div>
@@ -132,25 +78,12 @@
           <div class="strip__inner-text">
             <el-row>
               <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
-                <el-card :body-style="{ padding: '0px' }">
-                  <img
-                    src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/f92c44fe-7fed-4f00-8123-8b8dd3cbe413/sportswear-heritage86-futura-washed-hat-9zdC2m.jpg"
-                    class="image"
-                  />
-                  <div style="padding: 14px;">
-                    <p>Shoes</p>
-                    <div class="bottom clearfix">
-                      <el-input-number
-                        controls-position="right"
-                        :value="0"
-                        :min="0"
-                      ></el-input-number>
-                      <el-button type="primary" class="btn-buy"
-                        ><i class="fa fa-cart-plus" aria-hidden="true"></i
-                      ></el-button>
-                    </div>
-                  </div>
-                </el-card>
+                <ItemComponent
+                  name="Jeans"
+                  :price="120"
+                  itemImg="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/f92c44fe-7fed-4f00-8123-8b8dd3cbe413/sportswear-heritage86-futura-washed-hat-9zdC2m.jpg"
+                  @openTableVisible="openTableVisible"
+                />
               </el-col>
             </el-row>
           </div>
@@ -175,12 +108,6 @@
         </p>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-input-number
-          v-model="num"
-          controls-position="right"
-          :value="0"
-          :min="0"
-        ></el-input-number>
         <el-button class="btn-buy-modal" type="primary " @click="dialogTableVisible = false"
           ><i data-v-bfe2d226="" aria-hidden="true" class="fa fa-cart-plus"></i> Buy
         </el-button>
@@ -193,10 +120,11 @@
 import FooterComponet from '@/components/FooterComponet';
 import HeaderComponet from '@/components/HeaderComponent';
 import loginModal from '@/components/LoginModal.vue';
+import ItemComponent from '@/components/ItemComponent.vue';
 import vZoom from 'vue-zoom';
 
 export default {
-  components: { FooterComponet, HeaderComponet, vZoom, loginModal },
+  components: { FooterComponet, HeaderComponet, vZoom, loginModal, ItemComponent },
   data() {
     return {
       tabOpening: null,
@@ -235,7 +163,11 @@ export default {
     closeLoginModal() {
       this.isLoginModalVisible = false;
     },
-    signIn() {}
+    signIn() {},
+    openTableVisible(itemImg) {
+      this.img = itemImg;
+      this.dialogTableVisible = true;
+    }
   },
   created() {}
 };
