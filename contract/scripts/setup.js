@@ -23,11 +23,36 @@ const marketAddress = marketJson.networks['2'].address;
 const rate = 86;
 const interestRate = 2;
 const items = [
-  '200000000000000000',
-  '200000000000000000',
-  '200000000000000000',
-  '200000000000000000',
-  '200000000000000000'
+  {
+    price: '200000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '0'
+  },
+  {
+    price: '200000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '1'
+  },
+  {
+    price: '200000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '2'
+  },
+  {
+    price: '200000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '3'
+  },
+  {
+    price: '200000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '4'
+  }
 ];
 
 module.exports = async () => {
@@ -46,33 +71,33 @@ module.exports = async () => {
     await market.methods
       .setPointContract(pointAddress)
       .send(options)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log('Setup point contract successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Setup point contract error', error);
       });
 
     await market.methods
       .setBuyBackRate(rate)
       .send(options)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log('Setup rate successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Setup rate error', error);
       });
 
     await market.methods
       .setInterestRate(interestRate)
       .send(options)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log('Setup interest rate successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Setup interest rate error', error);
       });
 
@@ -88,11 +113,11 @@ module.exports = async () => {
     await point.methods
       .addMinter(marketAddress)
       .send(options)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log('Setup minter successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Setup minter error', error);
       });
 
@@ -104,11 +129,11 @@ module.exports = async () => {
     await point.methods
       .pause()
       .send(options)
-      .then((result) => {
+      .then(result => {
         // console.log(result);
         console.log('Pause successfully!');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Pause error', error);
       });
 

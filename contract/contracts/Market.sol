@@ -5,6 +5,8 @@ contract Market {
     struct Item {
         uint256 price;
         address owner;
+        string imageUrl;
+        uint256 itemType;
         bool isSelling;
     }
 
@@ -110,10 +112,15 @@ contract Market {
         public
         view
         itemInList(_id)
-        returns (uint256, address)
+        returns (
+            uint256,
+            address,
+            string memory,
+            uint256
+        )
     {
         Item storage item = items[_id];
-        return (item.price, item.owner);
+        return (item.price, item.owner, item.imageUrl, item.itemType);
     }
 
     function itemsOf(address _owner) public view returns (uint256[] memory) {
@@ -124,8 +131,15 @@ contract Market {
         return address(this).balance;
     }
 
-    function sell(uint256 _price, address _owner) public {
-        items.push(Item(_price, _owner, true));
+    function sell(
+        uint256 _price,
+        address _owner,
+        string memory _imageUrl,
+        uint256 _itemType
+    ) public {
+        require(0 <= _itemType && _itemType <= 4, "Item type must in 0 -> 4");
+
+        items.push(Item(_price, _owner, _imageUrl, _itemType, true));
         sellingItems.push(items.length - 1);
         emit Sell(items.length - 1, _price, _owner);
     }

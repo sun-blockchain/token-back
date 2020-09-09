@@ -111,9 +111,13 @@ export default new Vuex.Store({
         if (sellingItemIds) {
           sellingItems = await Promise.all(
             sellingItemIds.map(async id => {
-              let item = { id: id.toNumber(), price: null };
               let itemInfo = await market.methods.getItemById(id).call(options);
-              item.price = itemInfo[0];
+              let item = {
+                id: id.toNumber(),
+                price: itemInfo.price,
+                imageUrl: itemInfo.imageUrl,
+                itemType: itemInfo.itemType
+              };
               return item;
             })
           );

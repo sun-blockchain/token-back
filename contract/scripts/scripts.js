@@ -48,7 +48,7 @@ exports.mintPoint = async function (oneAddress, amount) {
   process.exit();
 };
 
-exports.createItem = async function (price, oneAddress) {
+exports.createItem = async function (price, oneAddress, imageUrl, itemType) {
   try {
     let address = hmy.crypto.getAddress(oneAddress).checksum;
     console.log('hmy', address);
@@ -61,7 +61,7 @@ exports.createItem = async function (price, oneAddress) {
 
     await market.wallet.signTransaction(sellTx);
     await market.methods
-      .sell(price, address)
+      .sell(price, address, imageUrl, itemType)
       .send(options)
       .then(result => {
         // console.log(result);
@@ -229,7 +229,7 @@ exports.setupItems = async function (items) {
 
   for (let i = 0; i < items.length; i++) {
     await market.methods
-      .sell(items[i], address)
+      .sell(items[i].price, address, items[i].imageUrl, items[i].itemType)
       .send(options)
       .then(result => {
         // console.log(result);
@@ -243,7 +243,7 @@ exports.setupItems = async function (items) {
 };
 
 // this.mintPoint(process.env.USER1_ADDRESS, '1000000000000000000');
-// this.createItem('200000000000000000', process.env.TESTNET_ADDRESS);
+// this.createItem('200000000000000000', process.env.TESTNET_ADDRESS, 'image', 1);
 // this.getItemById(0);
 // this.getAllItems();
 // this.getSellingItem(0);
