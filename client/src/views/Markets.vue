@@ -14,11 +14,18 @@
                   <img
                     src="https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg"
                     class="image"
+                    @click="dialogTableVisible = true"
                   />
-                  <div style="padding: 14px;">
+                  <div class="bottom-card">
                     <p>Shirt</p>
+                    <h5>100$</h5>
                     <div class="bottom clearfix">
-                      <el-button type="text" class="button"
+                      <el-input-number
+                        controls-position="right"
+                        :value="0"
+                        :min="0"
+                      ></el-input-number>
+                      <el-button type="primary" class="btn-buy"
                         ><i class="fa fa-cart-plus" aria-hidden="true"></i
                       ></el-button>
                     </div>
@@ -43,7 +50,12 @@
                   <div style="padding: 14px;">
                     <p>T-Shirt</p>
                     <div class="bottom clearfix">
-                      <el-button type="text" class="button"
+                      <el-input-number
+                        controls-position="right"
+                        :value="0"
+                        :min="0"
+                      ></el-input-number>
+                      <el-button type="primary" class="btn-buy"
                         ><i class="fa fa-cart-plus" aria-hidden="true"></i
                       ></el-button>
                     </div>
@@ -68,7 +80,12 @@
                   <div style="padding: 14px;">
                     <p>Jeans</p>
                     <div class="bottom clearfix">
-                      <el-button type="text" class="button"
+                      <el-input-number
+                        controls-position="right"
+                        :value="0"
+                        :min="0"
+                      ></el-input-number>
+                      <el-button type="primary" class="btn-buy"
                         ><i class="fa fa-cart-plus" aria-hidden="true"></i
                       ></el-button>
                     </div>
@@ -93,7 +110,12 @@
                   <div style="padding: 14px;">
                     <p>Shoes</p>
                     <div class="bottom clearfix">
-                      <el-button type="text" class="button"
+                      <el-input-number
+                        controls-position="right"
+                        :value="0"
+                        :min="0"
+                      ></el-input-number>
+                      <el-button type="primary" class="btn-buy"
                         ><i class="fa fa-cart-plus" aria-hidden="true"></i
                       ></el-button>
                     </div>
@@ -118,7 +140,12 @@
                   <div style="padding: 14px;">
                     <p>Shoes</p>
                     <div class="bottom clearfix">
-                      <el-button type="text" class="button"
+                      <el-input-number
+                        controls-position="right"
+                        :value="0"
+                        :min="0"
+                      ></el-input-number>
+                      <el-button type="primary" class="btn-buy"
                         ><i class="fa fa-cart-plus" aria-hidden="true"></i
                       ></el-button>
                     </div>
@@ -131,16 +158,52 @@
       </article>
       <i class="fa fa-close strip__close" @click="closeTab"></i>
     </section>
+    <el-dialog :title="titleProduct" :visible.sync="dialogTableVisible">
+      <v-zoom :img="img"></v-zoom>
+      <hr />
+      <div class="content-detail">
+        <h3>
+          Description:
+        </h3>
+        <p>
+          We are proud to present our best premium Shopify theme - Wokiee. This is multi-purpose
+          software that can be used for any type of the store. Great variety of available options
+          will make customization process very easy. Please, take a look at feature list and compare
+          with our competitors. You can buy our theme and start your business online with minimal
+          time investments. Wokiee support DropShipping app Oberlo. Wokiee Shopify theme is
+          powerfool tool to create personal webshop.
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-input-number
+          v-model="num"
+          controls-position="right"
+          :value="0"
+          :min="0"
+        ></el-input-number>
+        <el-button class="btn-buy-modal" type="primary " @click="dialogTableVisible = false"
+          ><i data-v-bfe2d226="" aria-hidden="true" class="fa fa-cart-plus"></i> Buy
+        </el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import FooterComponet from '@/components/FooterComponet';
 import HeaderComponet from '@/components/HeaderComponent';
+import vZoom from 'vue-zoom';
+
 export default {
-  components: { FooterComponet, HeaderComponet },
+  components: { FooterComponet, HeaderComponet, vZoom },
   data() {
     return {
-      tabOpening: null
+      tabOpening: null,
+      outerVisible: false,
+      titleProduct: 'Product 01',
+      dialogTableVisible: false,
+      num: 0,
+      img:
+        'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg'
     };
   },
   methods: {
@@ -173,4 +236,71 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/css/vuetify.css';
 @import '../assets/css/markets-style.scss';
+.width-100 {
+  width: 100%;
+}
+
+.content-detail {
+  width: 100%;
+  color: black;
+}
+
+.content-detail > h3 {
+  color: black;
+}
+
+.btn {
+  background: #2879fe;
+  font-family: 'Hind', sans-serif;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  position: relative;
+  outline: none;
+  padding: 6px 31px 4px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+}
+
+.btn-lg {
+  height: 50px;
+}
+
+.btn {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.btn-buy-modal {
+  width: 200px;
+  margin-left: 10px;
+}
+
+.btn-buy {
+  margin-left: 10px;
+}
+
+.fa.fa-close.strip__close {
+  font-size: 30px;
+}
+
+.bottom-card {
+  padding: 14px;
+}
+
+.bottom-card > h5 {
+  color: black;
+}
 </style>
