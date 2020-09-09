@@ -2,7 +2,8 @@
   <header class="header-markets">
     <nav>
       <router-link to="/">Home</router-link>
-      <router-link to="/">Account</router-link>
+      <router-link to="/markets">Markets</router-link>
+      <router-link to="/account">Account</router-link>
       <!-- <a href="#">Blog</a>
       <a href="#">Portefolio</a>
       <a href="#">Contact</a> -->
@@ -24,7 +25,7 @@ nav {
   margin: 0 auto;
 
   position: relative;
-  width: 210px;
+  width: 310px;
   height: 50px;
   background-color: #34495e;
   // border-radius: 8px;
@@ -70,7 +71,37 @@ a:nth-child(4) {
 a:nth-child(5) {
   width: 120px;
 }
-nav .start-home,
+
+a:nth-child(1).router-link-active ~ .animation {
+  width: 100px;
+  left: 0;
+  background-color: #1abc9c;
+}
+
+a:nth-child(2).router-link-active ~ .animation {
+  width: 110px;
+  left: 100px;
+  background-color: #e74c3c;
+}
+a:nth-child(3).router-link-active ~ .animation {
+  width: 100px;
+  left: 210px;
+  background-color: #3498db;
+}
+
+a:nth-child(4).router-link-active ~ .animation {
+  width: 160px;
+  left: 310px;
+  background-color: #9b59b6;
+}
+
+a:nth-child(5).router-link-active ~ .animation {
+  width: 120px;
+  left: 470px;
+  background-color: #e67e22;
+}
+
+// nav .start-home,
 a:nth-child(1):hover ~ .animation {
   width: 100px;
   left: 0;
