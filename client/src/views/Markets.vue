@@ -186,15 +186,17 @@
         </el-button>
       </span>
     </el-dialog>
+    <loginModal v-show="isLoginModalVisible" @close="closeLoginModal" @signIn="signIn" />
   </div>
 </template>
 <script>
 import FooterComponet from '@/components/FooterComponet';
 import HeaderComponet from '@/components/HeaderComponent';
+import loginModal from '@/components/LoginModal.vue';
 import vZoom from 'vue-zoom';
 
 export default {
-  components: { FooterComponet, HeaderComponet, vZoom },
+  components: { FooterComponet, HeaderComponet, vZoom, loginModal },
   data() {
     return {
       tabOpening: null,
@@ -203,7 +205,8 @@ export default {
       dialogTableVisible: false,
       num: 0,
       img:
-        'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg'
+        'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+      isLoginModalVisible: false
     };
   },
   methods: {
@@ -228,7 +231,11 @@ export default {
       var stripClose = document.querySelectorAll('.strip__close');
       stripClose[0].classList.remove('strip__close--show');
       stripClose[0].style.transition = 'all 0.2s 0s cubic-bezier(0.23, 1, 0.32, 1)';
-    }
+    },
+    closeLoginModal() {
+      this.isLoginModalVisible = false;
+    },
+    signIn() {}
   },
   created() {}
 };
