@@ -2,7 +2,10 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { Harmony } from '@harmony-js/core';
 import { ChainID, ChainType, fromWei, hexToNumber, Units } from '@harmony-js/utils';
+
 import Market from '@/contracts/Market.json';
+import { getBalance } from '../../../contract/scripts/scripts';
+
 const GAS_LIMIT = 6721900;
 const GAS_PRICE = 1000000000;
 const options = {
@@ -20,6 +23,7 @@ export default new Vuex.Store({
   state: {
     mathWallet: null,
     account: null,
+    oneBalance: 0,
     withdrawableStake: 0,
     market: null,
     sellingItems: []
@@ -30,7 +34,7 @@ export default new Vuex.Store({
     },
     setAccount(state, payload) {
       state.account = payload.account;
-      state.stakeBalance = payload.balance;
+      state.oneBalance = payload.oneBalance;
       state.withdrawableStake = payload.withdrawable;
     },
     setMarket(state, payload) {
@@ -41,13 +45,21 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    loadWallet({ commit }) {
+    async loadWallet({ commit }) {
       let mathWallet = window.harmony;
       const session = localStorage.getItem('harmony_session');
       const sessionObj = JSON.parse(session);
       if (sessionObj && sessionObj.account) {
         commit('setMathWallet', { mathWallet });
-        commit('setAccount', { account });
+        let market = state.market;
+        let withdrawable = 0;
+        if (market) {
+          let address = hmy.crypto.getAddress(account.address).checksum;
+          withdrawable = await market.methods.getWithdrawableStake(address).call(options);
+        }
+        let oneBalance = await getBalance(account.address);
+
+        commit('setAccount', { account, oneBalance, withdrawable });
       }
     },
 
@@ -76,7 +88,9 @@ export default new Vuex.Store({
             withdrawable = await market.methods.getWithdrawableStake(address).call(options);
           }
 
-          commit('setAccount', { account, withdrawable });
+          let oneBalance = await getBalance(account.address);
+
+          commit('setAccount', { account, oneBalance, withdrawable });
           dispatch('syncLocalStorage', { account: account, sessionType: 'mathWallet' });
         });
       }

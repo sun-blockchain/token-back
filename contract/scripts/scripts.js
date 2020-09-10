@@ -1,5 +1,6 @@
 const { Harmony } = require('@harmony-js/core');
 const { ChainID, ChainType } = require('@harmony-js/utils');
+
 const GAS_LIMIT = 6721900;
 const GAS_PRICE = 1000000000;
 require('dotenv').config();
@@ -242,6 +243,18 @@ exports.setupItems = async function (items) {
   return;
 };
 
+exports.getBalance = async function (oneAddress) {
+  try {
+    let data = await hmy.blockchain.getBalance({
+      address: oneAddress
+    });
+    return parseInt(data.result);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 // this.mintPoint(process.env.USER1_ADDRESS, '1000000000000000000');
 // this.createItem('200000000000000000', process.env.TESTNET_ADDRESS, 'image', 1);
 // this.getItemById(0);
@@ -253,3 +266,4 @@ exports.setupItems = async function (items) {
 // this.getStakeBalance(process.env.USER1_ADDRESS);
 // this.getWithdrawableStake(process.env.USER1_ADDRESS);
 // this.withdrawStake(344000000000000);
+// this.getBalance('one12j4ycvnta3l68ep28lpe73n20wx470yfzq9uf3');
