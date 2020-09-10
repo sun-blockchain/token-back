@@ -4,7 +4,7 @@ import { Harmony } from '@harmony-js/core';
 import { ChainID, ChainType, fromWei, hexToNumber, Units } from '@harmony-js/utils';
 
 import Market from '@/contracts/Market.json';
-import { getBalance } from '../../../contract/scripts/scripts';
+import { getBalance } from '../actions/index';
 
 const GAS_LIMIT = 6721900;
 const GAS_PRICE = 1000000000;
@@ -78,7 +78,7 @@ export default new Vuex.Store({
       let isMathWallet = window.harmony && window.harmony.isMathWallet;
       if (isMathWallet) {
         let mathWallet = window.harmony;
-        mathWallet.getAccount().then(async (account) => {
+        mathWallet.getAccount().then(async account => {
           commit('setMathWallet', { mathWallet });
 
           let market = state.market;
@@ -124,7 +124,7 @@ export default new Vuex.Store({
         let sellingItems = [];
         if (sellingItemIds) {
           sellingItems = await Promise.all(
-            sellingItemIds.map(async (id) => {
+            sellingItemIds.map(async id => {
               let itemInfo = await market.methods.getItemById(id).call(options);
               let item = {
                 id: id.toNumber(),
