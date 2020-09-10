@@ -1,5 +1,6 @@
 const { Harmony } = require('@harmony-js/core');
 const { ChainID, ChainType } = require('@harmony-js/utils');
+const Market = require('@/contracts/Market.json');
 
 const GAS_LIMIT = 6721900;
 const GAS_PRICE = 1000000000;
@@ -19,12 +20,16 @@ const pointJson = require('../contracts/Point.json');
 
 const pointAddress = pointJson.networks['2'].address;
 
+let marketAddress = Market.networks[2].address;
+
+let market = hmy.contracts.createContract(Market.abi, marketAddress);
+
 exports.getOneBalance = async function(oneAddress) {
   try {
     let data = await hmy.blockchain.getBalance({
       address: oneAddress
     });
-    return parseInt(data.result);
+    return parseInt(parseInt(data.result) / 10 ** 18);
   } catch (error) {
     console.log(error);
     return error;
@@ -38,6 +43,16 @@ exports.getPointBalance = async function(oneAddress) {
 
     let result = await point.methods.balanceOf(address).call(options);
     return parseInt(result);
+  } catch (error) {
+    return error;
+  }
+};
+
+exports.getRate = async function() {
+  try {
+    let interestRate = await market.methods.interestRate().call(options);
+    let buyBackRate = await market.methods.buyBackRate().call(options);
+    return { interestRate: parseInt(interestRate), buyBackRate: parseInt(buyBackRate) / 10 };
   } catch (error) {
     return error;
   }
