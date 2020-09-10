@@ -4,7 +4,7 @@ import { Harmony } from '@harmony-js/core';
 import { ChainID, ChainType, fromWei, hexToNumber, Units } from '@harmony-js/utils';
 
 import Market from '@/contracts/Market.json';
-import { getBalance } from '@/actions';
+import { getOneBalance, getPointBalance } from '@/actions';
 
 const GAS_LIMIT = 6721900;
 const GAS_PRICE = 1000000000;
@@ -24,6 +24,7 @@ export default new Vuex.Store({
     mathWallet: null,
     account: null,
     oneBalance: 0,
+    pointBalance: 0,
     withdrawableStake: 0,
     market: null,
     sellingItems: []
@@ -35,6 +36,7 @@ export default new Vuex.Store({
     setAccount(state, payload) {
       state.account = payload.account;
       state.oneBalance = payload.oneBalance;
+      state.pointBalance = payload.pointBalance;
       state.withdrawableStake = payload.withdrawable;
     },
     setMarket(state, payload) {
@@ -57,9 +59,10 @@ export default new Vuex.Store({
           let address = hmy.crypto.getAddress(account.address).checksum;
           withdrawable = await market.methods.getWithdrawableStake(address).call(options);
         }
-        let oneBalance = await getBalance(account.address);
+        let oneBalance = await getOneBalance(account.address);
+        let pointBalance = await getPointBalance(account.address);
 
-        commit('setAccount', { account, oneBalance, withdrawable });
+        commit('setAccount', { account, oneBalance, pointBalance, withdrawable });
       }
     },
 
@@ -88,9 +91,10 @@ export default new Vuex.Store({
             withdrawable = await market.methods.getWithdrawableStake(address).call(options);
           }
 
-          let oneBalance = await getBalance(account.address);
+          let oneBalance = await getOneBalance(account.address);
+          let pointBalance = await getPointBalance(account.address);
 
-          commit('setAccount', { account, oneBalance, withdrawable });
+          commit('setAccount', { account, oneBalance, pointBalance, withdrawable });
           dispatch('syncLocalStorage', { account: account, sessionType: 'mathWallet' });
         });
       }

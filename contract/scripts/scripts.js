@@ -243,12 +243,26 @@ exports.setupItems = async function (items) {
   return;
 };
 
-exports.getBalance = async function (oneAddress) {
+exports.getOneBalance = async function (oneAddress) {
   try {
     let data = await hmy.blockchain.getBalance({
       address: oneAddress
     });
     return parseInt(data.result);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+exports.getPointBalance = async function (oneAddress) {
+  try {
+    const address = hmy.crypto.getAddress(oneAddress).checksum;
+    const point = hmy.contracts.createContract(pointJson.abi, pointAddress);
+
+    let data = await point.methods.balanceOf(address).call(options);
+    console.log(parseInt(data));
+    return parseInt(data);
   } catch (error) {
     console.log(error);
     return error;
@@ -266,4 +280,5 @@ exports.getBalance = async function (oneAddress) {
 // this.getStakeBalance(process.env.USER1_ADDRESS);
 // this.getWithdrawableStake(process.env.USER1_ADDRESS);
 // this.withdrawStake(344000000000000);
-// this.getBalance('one12j4ycvnta3l68ep28lpe73n20wx470yfzq9uf3');
+// this.getOneBalance('one12j4ycvnta3l68ep28lpe73n20wx470yfzq9uf3');
+// this.getPointBalance('one12j4ycvnta3l68ep28lpe73n20wx470yfzq9uf3');
