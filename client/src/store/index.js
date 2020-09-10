@@ -4,7 +4,7 @@ import { Harmony } from '@harmony-js/core';
 import { ChainID, ChainType, fromWei, hexToNumber, Units } from '@harmony-js/utils';
 
 import Market from '@/contracts/Market.json';
-import { getOneBalance, getPointBalance } from '@/actions';
+import { getOneBalance, getPointBalance, getRate } from '@/actions';
 
 const GAS_LIMIT = 6721900;
 const GAS_PRICE = 1000000000;
@@ -27,7 +27,9 @@ export default new Vuex.Store({
     pointBalance: 0,
     withdrawableStake: 0,
     market: null,
-    sellingItems: []
+    sellingItems: [],
+    buyBackRate: 0,
+    interestRate: 0
   },
   mutations: {
     setMathWallet(state, payload) {
@@ -44,16 +46,21 @@ export default new Vuex.Store({
     },
     setSellingItems(state, payload) {
       state.sellingItems = payload.sellingItems;
+    },
+    setRate(state, payload) {
+      state.buyBackRate = payload.buyBackRate;
+      state.interestRate = payload.interestRate;
     }
   },
   actions: {
-    async loadWallet({ commit }) {
+    async loadWallet({ commit, state }) {
       let mathWallet = window.harmony;
       const session = localStorage.getItem('harmony_session');
       const sessionObj = JSON.parse(session);
       if (sessionObj && sessionObj.account) {
         commit('setMathWallet', { mathWallet });
         let market = state.market;
+        let account = sessionObj.account;
         let withdrawable = 0;
         if (market) {
           let address = hmy.crypto.getAddress(account.address).checksum;
@@ -64,6 +71,8 @@ export default new Vuex.Store({
 
         commit('setAccount', { account, oneBalance, pointBalance, withdrawable });
       }
+      let { interestRate, buyBackRate } = await getRate();
+      commit('setRate', { interestRate, buyBackRate });
     },
 
     syncLocalStorage({ commit }, { account, sessionType }) {

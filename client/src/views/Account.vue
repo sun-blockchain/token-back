@@ -7,13 +7,17 @@
         <el-col :span="12">
           <div class="center-content">
             <h3 class="text-balance">Balance</h3>
-            <p class="balance-amount"><b>100</b> <span>ONE</span></p>
+            <p class="balance-amount">
+              <b>{{ oneBalance }}</b> <span>ONE</span>
+            </p>
           </div>
         </el-col>
         <el-col :span="12"
           ><div class="center-content">
             <h3 class="text-points">Sun Coins</h3>
-            <p class="points-amount"><b>1000</b> <span>SUN</span></p>
+            <p class="points-amount">
+              <b>{{ pointBalance }}</b> <span>SUN</span>
+            </p>
           </div></el-col
         >
       </el-row>
@@ -27,11 +31,10 @@
           <div class="chevron"></div>
         </div>
         <div class="cashback-amount">
-          <b>50</b>&nbsp;&nbsp;&nbsp;&nbsp;
+          <b>{{ withdrawableStake }}</b
+          >&nbsp;&nbsp;&nbsp;&nbsp;
           <span>ONE</span>
-          <strong class="interest-rate">
-            + ( 8% / day )
-          </strong>
+          <strong class="interest-rate"> + ( {{ interestRate }}% / day ) </strong>
         </div>
 
         <el-button type="primary" round class="btn-witdraw"
@@ -56,12 +59,20 @@ export default {
     };
   },
   computed: {
-    ...mapState(['mathWallet'])
+    ...mapState([
+      'mathWallet',
+      'pointBalance',
+      'oneBalance',
+      'withdrawableStake',
+      'interestRate',
+      'buyBackRate'
+    ])
   },
   methods: {
-    ...mapActions(['signInWallet', 'signOutWallet'])
+    ...mapActions(['signInWallet', 'signOutWallet', 'loadWallet'])
   },
   async created() {
+    await this.loadWallet();
     let wallet = JSON.parse(localStorage.getItem('harmony_session'));
     // await this.signOutWallet();
     if (!wallet || !wallet.account) {
