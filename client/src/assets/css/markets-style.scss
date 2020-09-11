@@ -58,7 +58,7 @@ $color5: #f24b4b;
 
 .strips {
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   text-align: center;
   overflow: hidden;
   color: white;
@@ -267,10 +267,11 @@ $color5: #f24b4b;
 }
 
 .strip__close {
+  color: #fff;
   position: absolute;
   right: 3vw;
-  top: 3vw;
-  opacity: 0;
+  top: 5vw;
+  opacity: 1;
   z-index: 10;
   @include easeOut;
   cursor: pointer;
@@ -1150,4 +1151,121 @@ a[class^='ais-'] {
   color: #a5aed1;
   cursor: not-allowed;
   background: inherit;
+}
+
+.div-show {
+  text-align: center;
+  .strip-show {
+    overflow: hidden;
+    min-height: calc(100vh - 80px);
+    -webkit-animation: slide-down 0.7s ease-out;
+    -moz-animation: slide-down 0.7s ease-out;
+  }
+  .strip-show:nth-child(2) {
+    background-color: #60bfbf;
+  }
+  .strip-show:nth-child(3) {
+    background-color: #8c4b7e;
+  }
+  .strip-show:nth-child(4) {
+    background-color: #f8bb44;
+  }
+  .strip-show:nth-child(5) {
+    background-color: #f24b4b;
+  }
+  .content-strip {
+    width: 70%;
+    margin: 0 auto;
+    padding-top: 70px;
+    padding-bottom: 100px;
+  }
+}
+
+@-webkit-keyframes slide-down {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+  }
+}
+@-moz-keyframes slide-down {
+  0% {
+    opacity: 0;
+    -moz-transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: translateY(0);
+  }
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.content-detail {
+  width: 100%;
+  color: black;
+}
+
+.content-detail > h3 {
+  color: black;
+}
+
+.btn {
+  background: #2879fe;
+  font-family: 'Hind', sans-serif;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  position: relative;
+  outline: none;
+  padding: 6px 31px 4px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+}
+
+.btn-lg {
+  height: 50px;
+}
+
+.btn {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.btn-buy-modal {
+  width: 200px;
+  margin-left: 10px;
+}
+
+.btn-buy {
+  margin-left: 10px;
+}
+
+.fa.fa-close.strip__close {
+  font-size: 30px;
+}
+
+.bottom-card {
+  padding: 14px;
+}
+
+.bottom-card > h5 {
+  color: black;
 }
