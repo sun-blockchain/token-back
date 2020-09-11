@@ -1,5 +1,5 @@
 <template>
-  <div class="market-view">
+  <div class="market-view" v-loading="loading">
     <header-componet />
     <section class="strips" v-if="contentDisplay === -1">
       <article class="strips__strip" @click="openTab(0)">
@@ -41,18 +41,14 @@
         <i class="fa fa-close strip__close" @click="closeTab"></i>
         <div class="content-strip">
           <div class="row">
-            <div
-              class="col-4"
-              :span="6"
-              v-for="(item, index) in arr0"
-              :key="item.id"
-              :offset="index > 0 ? 2 : 0"
-            >
+            <div class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr0" :key="item.id">
               <ItemComponent
                 name="Shirt"
                 :price="item.price"
                 :itemImg="item.imageUrl"
+                :id="item.id"
                 @openTableVisible="openTableVisible"
+                @buyProduct="buyProductMarket"
               />
             </div>
           </div>
@@ -61,14 +57,23 @@
 
       <div class="strip-show" v-show="contentDisplay === 1">
         <i class="fa fa-close strip__close" @click="closeTab"></i>
+
         <div class="content-strip">
           <el-row>
-            <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
+            <el-col
+              class="col-12 col-sm-6 col-md-4"
+              :span="6"
+              v-for="item in arr1"
+              :key="item.id"
+              :offset="2"
+            >
               <ItemComponent
                 name="T-shirt"
-                :price="120"
-                itemImg="https://cf.shopee.vn/file/80196bdbee4665d42649feb9e66bf169"
+                :price="item.price"
+                :itemImg="item.imageUrl"
+                :id="item.id"
                 @openTableVisible="openTableVisible"
+                @buyProduct="buyProductMarket"
               />
             </el-col>
           </el-row>
@@ -79,12 +84,14 @@
         <i class="fa fa-close strip__close" @click="closeTab"></i>
         <div class="content-strip">
           <el-row>
-            <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
+            <el-col class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr2" :key="item.id">
               <ItemComponent
                 name="Jeans"
-                :price="120"
-                itemImg="https://anninc.scene7.com/is/image/LO/538256_9435?$pdp2x$"
+                :price="item.price"
+                :itemImg="item.imageUrl"
+                :id="item.id"
                 @openTableVisible="openTableVisible"
+                @buyProduct="buyProductMarket"
               />
             </el-col>
           </el-row>
@@ -94,12 +101,14 @@
         <i class="fa fa-close strip__close" @click="closeTab"></i>
         <div class="content-strip">
           <el-row>
-            <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
+            <el-col class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr3" :key="item.id">
               <ItemComponent
                 name="Jeans"
-                :price="120"
-                itemImg="https://assets.ajio.com/medias/sys_master/root/h5a/h59/13018715881502/-1117Wx1400H-460342492-blue-MODEL.jpg"
+                :price="item.price"
+                :itemImg="item.imageUrl"
+                :id="item.id"
                 @openTableVisible="openTableVisible"
+                @buyProduct="buyProductMarket"
               />
             </el-col>
           </el-row>
@@ -109,12 +118,14 @@
         <i class="fa fa-close strip__close" @click="closeTab"></i>
         <div class="content-strip">
           <el-row>
-            <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0">
+            <el-col class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr4" :key="item.id">
               <ItemComponent
                 name="Jeans"
-                :price="120"
-                itemImg="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/f92c44fe-7fed-4f00-8123-8b8dd3cbe413/sportswear-heritage86-futura-washed-hat-9zdC2m.jpg"
+                :price="item.price"
+                :itemImg="item.imageUrl"
+                :id="item.id"
                 @openTableVisible="openTableVisible"
+                @buyProduct="buyProductMarket"
               />
             </el-col>
           </el-row>
@@ -123,7 +134,7 @@
     </div>
 
     <el-dialog :title="titleProduct" :visible.sync="dialogTableVisible">
-      <v-zoom :img="img"></v-zoom>
+      <v-zoom :img="img" width="100%"></v-zoom>
       <hr />
       <div class="content-detail">
         <h3>
@@ -144,19 +155,48 @@
         </el-button>
       </span>
     </el-dialog>
-    <loginModal v-show="isLoginModalVisible" @close="closeLoginModal" @signIn="signIn" />
+    <!-- <loginModal v-show="isLoginModalVisible" @close="closeLoginModal" @signIn="signInWallet" /> -->
+    <el-dialog title="Warning" :visible.sync="isLoginModalVisible" width="30%" center>
+      <p class="text-center">
+        You need to connect with MathWallet. If you do not have MathWallet installed, you can access
+        it here:
+        <a
+          class="link-redirect"
+          target="_blank"
+          href="https://chrome.google.com/webstore/detail/math-wallet/afbcbjpbpfadlkmhmclhkeeodmamcflc"
+          >MathWallet</a
+        >
+      </p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isLoginModalVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="signIn">Sign In</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import FooterComponet from '@/components/FooterComponet';
 import HeaderComponet from '@/components/HeaderComponent';
-import loginModal from '@/components/LoginModal.vue';
 import ItemComponent from '@/components/ItemComponent.vue';
 import { mapState, mapActions } from 'vuex';
 import vZoom from 'vue-zoom';
+import { Harmony } from '@harmony-js/core';
+import { ChainID, ChainType } from '@harmony-js/utils';
+
+const GAS_LIMIT = 6721900;
+const GAS_PRICE = 1000000000;
+const options = {
+  gasPrice: GAS_PRICE,
+  gasLimit: GAS_LIMIT
+};
+
+const hmy = new Harmony('https://api.s0.b.hmny.io', {
+  chainID: ChainID.HmyTestnet,
+  chainType: ChainType.Harmony
+});
 
 export default {
-  components: { FooterComponet, HeaderComponet, vZoom, loginModal, ItemComponent },
+  components: { FooterComponet, HeaderComponet, vZoom, ItemComponent },
   data() {
     return {
       tabOpening: null,
@@ -172,14 +212,22 @@ export default {
       arr1: [],
       arr2: [],
       arr3: [],
-      arr4: []
+      arr4: [],
+      loading: false
     };
   },
   computed: {
-    ...mapState(['sellingItems'])
+    ...mapState(['sellingItems', 'account', 'market'])
   },
   methods: {
-    ...mapActions(['fetchSellingItems', 'initMarket']),
+    ...mapActions([
+      'fetchSellingItems',
+      'initMarket',
+      'signInWallet',
+      'loadWallet',
+      'signOutWallet',
+      'initMarket'
+    ]),
     openTab(index) {
       this.contentDisplay = index;
     },
@@ -189,7 +237,59 @@ export default {
     closeLoginModal() {
       this.isLoginModalVisible = false;
     },
-    signIn() {},
+    signIn() {
+      this.isLoginModalVisible = false;
+      this.signInWallet();
+    },
+    async buyProductMarket(id, price) {
+      this.loading = true;
+      await this.loadWallet();
+      if (this.account) {
+        let market = this.market;
+        try {
+          market.wallet.defaultSigner = hmy.crypto.getAddress(this.account.address).checksum;
+          market.wallet.signTransaction = async tx => {
+            try {
+              tx.from = hmy.crypto.getAddress(this.account.address).checksum;
+              const signTx = await window.harmony.signTransaction(tx);
+              return signTx;
+            } catch (e) {
+              this.loading = false;
+              this.$message({
+                message: e.message,
+                type: 'error'
+              });
+              return false;
+            }
+          };
+          await market.methods
+            .buy(id)
+            .send({ ...options, value: price * 10 ** 18 })
+            .then(e => {
+              this.loading = false;
+              this.$message({
+                message: e.transaction.id,
+                type: 'success'
+              });
+              return true;
+            });
+        } catch (e) {
+          this.$message({
+            message: e.message,
+            type: 'error'
+          });
+          this.loading = false;
+          return false;
+        }
+      } else {
+        this.isLoginModalVisible = true;
+      }
+      await this.fetchSellingItems();
+      if (this.sellingItems && this.sellingItems.length > 0) {
+        await this.classification();
+      }
+      this.loading = false;
+    },
     openTableVisible(itemImg) {
       this.img = itemImg;
       this.dialogTableVisible = true;
@@ -234,10 +334,21 @@ export default {
     if (this.sellingItems && this.sellingItems.length > 0) {
       this.classification();
     }
+    // await this.signOutWallet();
   }
 };
 </script>
 <style lang="scss" scoped>
 @import '../assets/css/vuetify.css';
 @import '../assets/css/markets-style.scss';
+.text-center {
+  text-align: center;
+}
+
+.link-redirect {
+  color: blue;
+}
+.link-redirect:hover {
+  color: blue;
+}
 </style>

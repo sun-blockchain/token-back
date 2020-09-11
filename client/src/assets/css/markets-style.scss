@@ -1158,8 +1158,8 @@ a[class^='ais-'] {
   .strip-show {
     overflow: hidden;
     min-height: calc(100vh - 80px);
-    -webkit-animation: slide-down 0.7s ease-out;
-    -moz-animation: slide-down 0.7s ease-out;
+    -webkit-animation: slide-down 0.5s ease-out;
+    -moz-animation: slide-down 0.5s ease-out;
   }
   .strip-show:nth-child(2) {
     background-color: #60bfbf;

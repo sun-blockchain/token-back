@@ -1,11 +1,15 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
-    <img :src="itemImg" class="image" @click="openTableVisible" />
+    <el-image :src="itemImg" class="list-image-market" @click="openTableVisible">
+      <div slot="error" class="image-slot">
+        <img src="@/assets/img/tshirt.png" class="list-image-market" />
+      </div>
+    </el-image>
     <div class="bottom-card">
       <p>{{ name }}</p>
       <h5>{{ price }} ONE</h5>
       <div class="bottom clearfix">
-        <el-button type="primary" class="btn-buy"
+        <el-button type="primary" class="btn-buy" @click="buyProduct"
           ><i class="fa fa-cart-plus" aria-hidden="true"></i
         ></el-button>
       </div>
@@ -16,6 +20,9 @@
 export default {
   name: 'Item',
   props: {
+    id: {
+      type: Number
+    },
     itemImg: {
       type: String,
       default: '@/assets/img/not_found.jpg'
@@ -30,6 +37,9 @@ export default {
   methods: {
     openTableVisible() {
       this.$emit('openTableVisible', this.itemImg);
+    },
+    buyProduct() {
+      this.$emit('buyProduct', this.id, this.price);
     }
   }
 };
@@ -50,5 +60,9 @@ export default {
 
 .bottom-card > h5 {
   color: black;
+}
+
+.list-image-market {
+  height: 415.06px;
 }
 </style>
