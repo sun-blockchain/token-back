@@ -36,7 +36,30 @@
           <span>ONE</span>
           <strong class="interest-rate"> + ( {{ interestRate }}% / day ) </strong>
         </div>
-
+        <br />
+        <form id="form" method="post" action="">
+          <div class="flex">
+            <span class="currency">ONE</span>
+            <input
+              :value="sliderValue"
+              placeholder="Amount"
+              :max="withdrawableStake"
+              min="0"
+              @input="updateWithdrawValue"
+              type="number"
+            />
+          </div>
+          <br />
+        </form>
+        <range-slider
+          class="slider"
+          min="0"
+          :max="withdrawableStake"
+          step="1"
+          v-model="sliderValue"
+        >
+        </range-slider>
+        <br />
         <el-button type="primary" round class="btn-witdraw"
           ><i class="el-icon-download"></i> Withdraw</el-button
         >
@@ -46,16 +69,19 @@
 </template>
 
 <script>
+import RangeSlider from 'vue-range-slider';
+import 'vue-range-slider/dist/vue-range-slider.css';
 import HeaderComponet from '@/components/HeaderComponent';
 import { mapState, mapActions } from 'vuex';
 import loginModal from '@/components/LoginModal.vue';
 
 export default {
-  components: { HeaderComponet, loginModal },
+  components: { HeaderComponet, loginModal, RangeSlider },
   name: 'account',
   data() {
     return {
-      isLoginModalVisible: false
+      isLoginModalVisible: false,
+      sliderValue: 0
     };
   },
   computed: {
@@ -69,7 +95,14 @@ export default {
     ])
   },
   methods: {
-    ...mapActions(['signInWallet', 'signOutWallet', 'loadWallet'])
+    ...mapActions(['signInWallet', 'signOutWallet', 'loadWallet']),
+    updateWithdrawValue(e) {
+      const value = e.target.value;
+      if (value > this.withdrawableStake) {
+        this.sliderValue = this.withdrawableStake;
+        this.$forceUpdate();
+      }
+    }
   },
   async created() {
     await this.loadWallet();
@@ -88,7 +121,7 @@ export default {
   min-height: 100vh;
   .balance-and-points {
     background: #34495e;
-    padding-top: 100px;
+    padding-top: 20px;
   }
   .center-content {
     text-align: center;
@@ -156,8 +189,8 @@ export default {
       0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12);
 
     min-height: 200px;
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     margin: 0 auto;
     background: white;
     border-radius: 50%;
@@ -234,5 +267,55 @@ export default {
       transform: translateY(-$base * 8) scale(0.5);
     }
   }
+}
+.slider {
+  /* overwrite slider styles */
+  width: 200px;
+}
+form {
+  width: 100%;
+  max-width: 160px;
+  margin: 0px auto;
+}
+form input {
+  font-size: 20px;
+  padding: 0;
+  border: 2px solid #ccc;
+  border-left: 0;
+  color: #666;
+  border-radius: 0 7px 7px 0;
+  font-family: 'PT Sans', sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+form input:focus {
+  outline: 0;
+}
+form input.error {
+  border-color: #ff0000;
+}
+form label.error {
+  background-color: #ff0000;
+  color: #fff;
+  padding: 6px;
+  font-size: 11px;
+}
+.flex {
+  display: flex;
+  justify-content: flex-start;
+}
+.flex input {
+  max-width: 300px;
+  flex: 1 1 300px;
+}
+.flex .currency {
+  font-size: 13px;
+  padding: 0 10px 0 20px;
+  color: #999;
+  border: 2px solid #ccc;
+  border-right: 0;
+  line-height: 2.5;
+  border-radius: 7px 0 0 7px;
+  background: white;
 }
 </style>
