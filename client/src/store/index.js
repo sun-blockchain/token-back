@@ -151,6 +151,32 @@ export default new Vuex.Store({
         }
         commit('setSellingItems', { sellingItems });
       }
+    },
+
+    async withdraw({ dispatch, state }, amount) {
+      let market = state.market;
+      if (market) {
+        try {
+          market.wallet.defaultSigner = hmy.crypto.getAddress(state.account.address).checksum;
+          market.wallet.signTransaction = async tx => {
+            try {
+              tx.from = hmy.crypto.getAddress(state.account.address).checksum;
+              const signTx = await window.harmony.signTransaction(tx);
+              return signTx;
+            } catch (e) {
+              console.log(e);
+            }
+          };
+        } catch (e) {
+          console.log(e);
+        }
+        await market.methods
+          .withdrawStake(amount.toString())
+          .send({ ...options })
+          .then(e => {
+            dispatch('loadWallet');
+          });
+      }
     }
   },
   modules: {}
