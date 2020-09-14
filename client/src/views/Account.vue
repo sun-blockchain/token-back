@@ -73,10 +73,9 @@ import RangeSlider from 'vue-range-slider';
 import 'vue-range-slider/dist/vue-range-slider.css';
 import HeaderComponet from '@/components/HeaderComponent';
 import { mapState, mapActions } from 'vuex';
-import loginModal from '@/components/LoginModal.vue';
 
 export default {
-  components: { HeaderComponet, loginModal, RangeSlider },
+  components: { HeaderComponet, RangeSlider },
   name: 'account',
   data() {
     return {

@@ -270,7 +270,12 @@ exports.getPointBalance = async function (oneAddress) {
 };
 
 // this.mintPoint(process.env.USER1_ADDRESS, '1000000000000000000');
-// this.createItem('200000000000000000', process.env.TESTNET_ADDRESS, 'image', 1);
+// this.createItem(
+//   '200000000000000000',
+//   process.env.TESTNET_ADDRESS,
+//   'https://kathmandu.imgix.net/catalog/product/1/5/15108_605_federatewomenslsshirt_v2_a.jpg',
+//   0
+// );
 // this.getItemById(0);
 // this.getAllItems();
 // this.getSellingItem(0);
