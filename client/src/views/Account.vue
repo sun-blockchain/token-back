@@ -14,15 +14,15 @@
         </el-col>
         <el-col :span="12"
           ><div class="center-content">
-            <h3 class="text-points">Sun Coins</h3>
+            <h3 class="text-points">Sun Coin</h3>
             <p class="points-amount">
-              <b>{{ pointBalance }}</b> <span>SUN</span>
+              <b>{{ (pointBalance / 10 ** 18).toFixed(2) }}</b> <span>SUN</span>
             </p>
           </div></el-col
         >
       </el-row>
     </div>
-    <div class="cashback">
+    <div class="cashback" v-loading="loading">
       <div class="box-cashback">
         <h3>Interest</h3>
         <div class="arrow-top">
@@ -31,7 +31,7 @@
           <div class="chevron"></div>
         </div>
         <div class="cashback-amount">
-          <b>{{ withdrawableStake }}</b
+          <b>{{ (withdrawableStake / 10 ** 18).toFixed(3) }}</b
           >&nbsp;&nbsp;&nbsp;&nbsp;
           <span>ONE</span>
           <strong class="interest-rate"> + ( {{ interestRate }}% / day ) </strong>
@@ -51,20 +51,29 @@
           </div>
           <br />
         </form>
-        <range-slider
-          class="slider"
-          min="0"
-          :max="withdrawableStake"
-          step="1"
-          v-model="sliderValue"
-        >
+        <range-slider class="slider" min="0" :max="withdrawValue" step="0.01" v-model="sliderValue">
         </range-slider>
         <br />
-        <el-button type="primary" round class="btn-witdraw"
+        <el-button
+          type="primary"
+          round
+          class="btn-witdraw"
+          @click="withdrawModal = true"
+          :disabled="sliderValue <= 0"
           ><i class="el-icon-download"></i> Withdraw</el-button
         >
       </div>
     </div>
+    <el-dialog title="" :visible.sync="withdrawModal" width="30%" center>
+      <span
+        >You will withdraw {{ sliderValue }} corresponding to {{ pointBurn.toFixed(2) }} of Sun coin
+        will be burned</span
+      >
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="withdrawModal = false">Cancel</el-button>
+        <el-button type="primary" @click="withdrawOne">Confirm</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -73,6 +82,20 @@ import RangeSlider from 'vue-range-slider';
 import 'vue-range-slider/dist/vue-range-slider.css';
 import HeaderComponet from '@/components/HeaderComponent';
 import { mapState, mapActions } from 'vuex';
+import { Harmony } from '@harmony-js/core';
+import { ChainID, ChainType } from '@harmony-js/utils';
+
+const GAS_LIMIT = 6721900;
+const GAS_PRICE = 1000000000;
+const options = {
+  gasPrice: GAS_PRICE,
+  gasLimit: GAS_LIMIT
+};
+
+const hmy = new Harmony('https://api.s0.b.hmny.io', {
+  chainID: ChainID.HmyTestnet,
+  chainType: ChainType.Harmony
+});
 
 export default {
   components: { HeaderComponet, RangeSlider },
@@ -80,7 +103,9 @@ export default {
   data() {
     return {
       isLoginModalVisible: false,
-      sliderValue: 0
+      sliderValue: 0,
+      withdrawModal: false,
+      loading: false
     };
   },
   computed: {
@@ -90,23 +115,88 @@ export default {
       'oneBalance',
       'withdrawableStake',
       'interestRate',
-      'buyBackRate'
-    ])
+      'buyBackRate',
+      'market',
+      'account'
+    ]),
+    pointBurn: function() {
+      if (this.withdrawableStake > 0) {
+        return (this.sliderValue * this.pointBalance) / this.withdrawableStake;
+      } else {
+        return 0;
+      }
+    },
+    withdrawValue: {
+      get: function() {
+        return this.withdrawableStake / 10 ** 18;
+      }
+    }
   },
   methods: {
-    ...mapActions(['signInWallet', 'signOutWallet', 'loadWallet']),
+    ...mapActions([
+      'signInWallet',
+      'signOutWallet',
+      'loadWallet',
+      'withdraw',
+      'initMarket',
+      'withdraw'
+    ]),
     updateWithdrawValue(e) {
       const value = e.target.value;
       if (value > this.withdrawableStake) {
         this.sliderValue = this.withdrawableStake;
         this.$forceUpdate();
       }
+    },
+    async withdrawOne() {
+      let market = this.market;
+      let account = this.account;
+      this.withdrawModal = false;
+      this.loading = true;
+      if (account && market) {
+        try {
+          market.wallet.defaultSigner = hmy.crypto.getAddress(account.address).checksum;
+          market.wallet.signTransaction = async tx => {
+            try {
+              tx.from = hmy.crypto.getAddress(account.address).checksum;
+              const signTx = await window.harmony.signTransaction(tx);
+              return signTx;
+            } catch (e) {
+              this.loading = false;
+              this.$message({
+                message: e.message,
+                type: 'error'
+              });
+              return false;
+            }
+          };
+          await market.methods
+            .withdrawStake((this.sliderValue * 10 ** 18).toString())
+            .send({ ...options })
+            .then(e => {
+              this.loading = false;
+              this.$message({
+                message: e.transaction.id,
+                type: 'success'
+              });
+              return true;
+            });
+          await this.loadWallet();
+        } catch (e) {
+          this.loading = false;
+          this.$message({
+            message: e.message,
+            type: 'error'
+          });
+          return false;
+        }
+      }
     }
   },
   async created() {
+    await this.initMarket();
     await this.loadWallet();
     let wallet = JSON.parse(localStorage.getItem('harmony_session'));
-    // await this.signOutWallet();
     if (!wallet || !wallet.account) {
       this.signInWallet();
     }
@@ -273,7 +363,7 @@ export default {
 }
 form {
   width: 100%;
-  max-width: 160px;
+  max-width: 295px;
   margin: 0px auto;
 }
 form input {

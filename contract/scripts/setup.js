@@ -24,31 +24,67 @@ const rate = 86;
 const interestRate = 2;
 const items = [
   {
-    price: '200000000000000000',
+    price: '10000000000000000000',
     imageUrl:
       'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
     itemType: '0'
   },
   {
-    price: '200000000000000000',
+    price: '19000000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '0'
+  },
+  {
+    price: '12000000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '0'
+  },
+  {
+    price: '7000000000000000000',
     imageUrl:
       'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
     itemType: '1'
   },
   {
-    price: '200000000000000000',
+    price: '4000000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '1'
+  },
+  {
+    price: '60000000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '1'
+  },
+  {
+    price: '40000000000000000000',
     imageUrl:
       'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
     itemType: '2'
   },
   {
-    price: '200000000000000000',
+    price: '60000000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '2'
+  },
+  {
+    price: '12000000000000000000',
     imageUrl:
       'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
     itemType: '3'
   },
   {
-    price: '200000000000000000',
+    price: '16000000000000000000',
+    imageUrl:
+      'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
+    itemType: '3'
+  },
+  {
+    price: '9000000000000000000',
     imageUrl:
       'https://contents.mediadecathlon.com/p1484240/k$ab565f3675dbdd7e3c486175e2c16583/travel-100-men-s-trekking-shirt-maroon.jpg',
     itemType: '4'

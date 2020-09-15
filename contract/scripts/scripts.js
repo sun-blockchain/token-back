@@ -146,7 +146,7 @@ exports.getWithdrawableStake = async function (oneAddress) {
     let address = hmy.crypto.getAddress(oneAddress).checksum;
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
     let ableWithdraw = await market.methods.getWithdrawableStake(address).call(options);
-    console.log(ableWithdraw);
+    console.log('withdraw', ableWithdraw);
     return ableWithdraw;
   } catch (error) {
     console.log(error);
