@@ -26,6 +26,13 @@ const routes = [
     component: function() {
       return import('../views/Account.vue');
     }
+  },
+  {
+    path: '/my-products',
+    name: 'MyProducts',
+    component: function() {
+      return import('../views/MyProducts.vue');
+    }
   }
 ];
 

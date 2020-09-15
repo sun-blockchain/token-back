@@ -58,7 +58,7 @@ $color5: #f24b4b;
 
 .strips {
   position: relative;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 120px);
   text-align: center;
   overflow: hidden;
   color: white;
@@ -270,7 +270,7 @@ $color5: #f24b4b;
   color: #fff;
   position: absolute;
   right: 3vw;
-  top: 5vw;
+  top: 6.5vw;
   opacity: 1;
   z-index: 10;
   @include easeOut;
@@ -1151,34 +1151,6 @@ a[class^='ais-'] {
   color: #a5aed1;
   cursor: not-allowed;
   background: inherit;
-}
-
-.div-show {
-  text-align: center;
-  .strip-show {
-    overflow: hidden;
-    min-height: calc(100vh - 80px);
-    -webkit-animation: slide-down 0.5s ease-out;
-    -moz-animation: slide-down 0.5s ease-out;
-  }
-  .strip-show:nth-child(2) {
-    background-color: #60bfbf;
-  }
-  .strip-show:nth-child(3) {
-    background-color: #8c4b7e;
-  }
-  .strip-show:nth-child(4) {
-    background-color: #f8bb44;
-  }
-  .strip-show:nth-child(5) {
-    background-color: #f24b4b;
-  }
-  .content-strip {
-    width: 70%;
-    margin: 0 auto;
-    padding-top: 70px;
-    padding-bottom: 100px;
-  }
 }
 
 @-webkit-keyframes slide-down {

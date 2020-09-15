@@ -59,14 +59,8 @@
         <i class="fa fa-close strip__close" @click="closeTab"></i>
 
         <div class="content-strip">
-          <el-row>
-            <el-col
-              class="col-12 col-sm-6 col-md-4"
-              :span="6"
-              v-for="item in arr1"
-              :key="item.id"
-              :offset="2"
-            >
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr1" :key="item.id">
               <ItemComponent
                 name="T-shirt"
                 :price="item.price"
@@ -75,16 +69,16 @@
                 @openTableVisible="openTableVisible"
                 @buyProduct="buyProductMarket"
               />
-            </el-col>
-          </el-row>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="strip-show" v-show="contentDisplay === 2">
         <i class="fa fa-close strip__close" @click="closeTab"></i>
         <div class="content-strip">
-          <el-row>
-            <el-col class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr2" :key="item.id">
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr2" :key="item.id">
               <ItemComponent
                 name="Jeans"
                 :price="item.price"
@@ -93,15 +87,15 @@
                 @openTableVisible="openTableVisible"
                 @buyProduct="buyProductMarket"
               />
-            </el-col>
-          </el-row>
+            </div>
+          </div>
         </div>
       </div>
       <div class="strip-show" v-show="contentDisplay === 3">
         <i class="fa fa-close strip__close" @click="closeTab"></i>
         <div class="content-strip">
-          <el-row>
-            <el-col class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr3" :key="item.id">
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr3" :key="item.id">
               <ItemComponent
                 name="Jeans"
                 :price="item.price"
@@ -110,15 +104,15 @@
                 @openTableVisible="openTableVisible"
                 @buyProduct="buyProductMarket"
               />
-            </el-col>
-          </el-row>
+            </div>
+          </div>
         </div>
       </div>
       <div class="strip-show" v-show="contentDisplay === 4">
         <i class="fa fa-close strip__close" @click="closeTab"></i>
         <div class="content-strip">
-          <el-row>
-            <el-col class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr4" :key="item.id">
+          <div class="row">
+            <div class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in arr4" :key="item.id">
               <ItemComponent
                 name="Jeans"
                 :price="item.price"
@@ -127,8 +121,8 @@
                 @openTableVisible="openTableVisible"
                 @buyProduct="buyProductMarket"
               />
-            </el-col>
-          </el-row>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -271,6 +265,7 @@ export default {
                 message: e.transaction.id,
                 type: 'success'
               });
+              this.$router.push({ name: 'MyProducts' });
               return true;
             });
         } catch (e) {
@@ -339,7 +334,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '../assets/css/vuetify.css';
 @import '../assets/css/markets-style.scss';
 .text-center {
   text-align: center;

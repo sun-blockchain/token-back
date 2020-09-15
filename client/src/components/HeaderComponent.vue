@@ -1,19 +1,65 @@
 <template>
   <header class="header-markets">
-    <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/markets">Markets</router-link>
-      <router-link to="/account">Account</router-link>
-      <!-- <a href="#">Blog</a>
-      <a href="#">Portefolio</a>
-      <a href="#">Contact</a> -->
-      <div class="animation start-home"></div>
-    </nav>
+    <div class="row">
+      <div class="col-12 col-md-2 center-inline-block">
+        <img src="@/assets/fonts/logo.png" class="logo-header" />
+      </div>
+      <div class="col-12 col-md-8">
+        <nav>
+          <router-link to="/">Home</router-link>
+          <router-link to="/markets">Markets</router-link>
+          <router-link to="/account">Account</router-link>
+          <!-- <router-link to="/my-products">My Products</router-link> -->
+          <!-- <a href="#">Blog</a>
+          <a href="#">Portefolio</a>
+          <a href="#">Contact</a> -->
+          <div class="animation start-home"></div>
+        </nav>
+      </div>
+      <div class="col-12 col-md-2 center-inline-block">
+        <el-dropdown trigger="click" class="info-account">
+          <span class="el-dropdown-link">
+            {{ showAddress }} <i class="el-icon-caret-bottom el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item class="clearfix">
+              Balance
+            </el-dropdown-item>
+            <el-dropdown-item class="clearfix">
+              <router-link to="/my-products" tag="span">My Products</router-link>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </div>
   </header>
 </template>
 
 <script>
-export default {};
+import { mapState, mapActions } from 'vuex';
+export default {
+  name: 'heaer-component',
+  data() {
+    return {
+      address: ''
+    };
+  },
+  computed: {
+    ...mapState(['account']),
+    showAddress() {
+      let result =
+        this.address.substring(0, 3) + '...' + this.address.substring(this.address.length - 4);
+      return result;
+    }
+  },
+  methods: {
+    ...mapActions(['loadWallet'])
+  },
+  async created() {
+    await this.loadWallet();
+    this.address = this.account.address;
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -21,9 +67,40 @@ export default {};
   background: #34495e;
   padding: 15px;
 }
+
+.center-inline-block {
+  display: flex;
+  justify-content: center;
+  // align-items: center;
+}
+
+.logo-header {
+  width: 70%;
+}
+
+.info-account {
+  background: #212533;
+  border-radius: 3px;
+  padding: 0.5rem;
+  letter-spacing: 1px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: none;
+  height: 50px;
+  span {
+    color: white;
+  }
+}
+
+li:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.clear-both {
+  clear: both;
+}
 nav {
   margin: 0 auto;
-
   position: relative;
   width: 310px;
   height: 50px;
@@ -72,11 +149,11 @@ a:nth-child(5) {
   width: 120px;
 }
 
-a:nth-child(1).router-link-active ~ .animation {
-  width: 100px;
-  left: 0;
-  background-color: #1abc9c;
-}
+// a:nth-child(1).router-link-active ~ .animation {
+//   width: 100px;
+//   left: 0;
+//   background-color: #1abc9c;
+// }
 
 a:nth-child(2).router-link-active ~ .animation {
   width: 110px;

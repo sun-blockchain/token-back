@@ -29,7 +29,8 @@ export default new Vuex.Store({
     market: null,
     sellingItems: [],
     buyBackRate: 0,
-    interestRate: 0
+    interestRate: 0,
+    itemsOf: []
   },
   mutations: {
     setMathWallet(state, payload) {
@@ -50,6 +51,9 @@ export default new Vuex.Store({
     setRate(state, payload) {
       state.buyBackRate = payload.buyBackRate;
       state.interestRate = payload.interestRate;
+    },
+    setItemsOf(state, itemsOf) {
+      state.itemsOf = itemsOf;
     }
   },
   actions: {
@@ -176,6 +180,29 @@ export default new Vuex.Store({
           .then(e => {
             dispatch('loadWallet');
           });
+      }
+    },
+    async getItemsOf({ commit, state }, account) {
+      let market = state.market;
+      let address = hmy.crypto.getAddress(account.address).checksum;
+      if (market) {
+        let resItemsOf = await market.methods.itemsOf(address).call(options);
+        let itemsOf = [];
+        if (resItemsOf) {
+          itemsOf = await Promise.all(
+            resItemsOf.map(async id => {
+              let itemInfo = await market.methods.getItemById(parseInt(id)).call(options);
+              let item = {
+                id: id.toNumber(),
+                price: parseInt(itemInfo[0]) / 10 ** 18,
+                imageUrl: itemInfo[2],
+                itemType: parseInt(itemInfo[3])
+              };
+              return item;
+            })
+          );
+        }
+        commit('setItemsOf', itemsOf);
       }
     }
   },

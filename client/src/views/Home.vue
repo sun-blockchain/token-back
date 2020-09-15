@@ -27,7 +27,7 @@
               </ul>
               <ul class="st h re">
                 <li>
-                  <a href="#">My Account</a>
+                  <router-link to="/account">My Account</router-link>
                 </li>
               </ul>
             </div>
