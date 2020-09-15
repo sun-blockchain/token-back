@@ -5,8 +5,8 @@
         <div class="n_">
           <div class="nk">
             <h1 class="sz">
-              <a href="index.html">
-                <img src="@/assets/fonts/logo.svg" alt="Neon" width="32" height="32" />
+              <a href="#">
+                <img src="@/assets/fonts/logo.png" alt="Neon" width="250" height="250" />
               </a>
             </h1>
           </div>
@@ -43,11 +43,10 @@
               <div class="split-item">
                 <div class="rg nh az">
                   <h1 class="oe ok reveal-from-bottom" data-reveal-delay="150">
-                    Start-up aladin and magic lamp
+                    Start-up CashBack and the Boomerang
                   </h1>
                   <p class="oe us reveal-from-bottom" data-reveal-delay="300">
-                    Purchase and get a refund. The money is refundable, profitable in return on loan
-                    and you can do whatever you want.
+                    We pay more than cash back
                   </p>
                   <div class="reveal-from-bottom" data-reveal-delay="450">
                     <router-link to="/markets" class="tbuttonn fbuttonl gbuttony"
@@ -89,8 +88,8 @@
         <div class="ri">
           <div class="rs rh h">
             <div class="nk">
-              <a href="index.html">
-                <img src="@/assets/fonts/logo.svg" alt="Neon" width="32" height="32" />
+              <a href="#">
+                <img src="@/assets/fonts/logo.png" alt="Neon" width="200" height="200" />
               </a>
             </div>
             <div class="rl">
