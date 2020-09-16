@@ -2,7 +2,20 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { Harmony } from '@harmony-js/core';
 import { ChainID, ChainType, fromWei, hexToNumber, Units } from '@harmony-js/utils';
-
+const {
+  encode,
+  decode,
+  randomBytes,
+  toBech32,
+  fromBech32,
+  HarmonyAddress,
+  generatePrivateKey,
+  getPubkeyFromPrivateKey,
+  getAddressFromPublicKey,
+  getAddressFromPrivateKey,
+  encryptPhrase,
+  decryptPhrase
+} = require('@harmony-js/crypto');
 import Market from '@/contracts/Market.json';
 import { getOneBalance, getPointBalance, getRate } from '@/actions';
 
@@ -12,8 +25,8 @@ const options = {
   gasPrice: GAS_PRICE,
   gasLimit: GAS_LIMIT
 };
-const hmy = new Harmony('https://api.s0.b.hmny.io', {
-  chainID: ChainID.HmyTestnet,
+const hmy = new Harmony('https://api.s0.t.hmny.io', {
+  chainID: ChainID.HmyMainnet,
   chainType: ChainType.Harmony
 });
 
@@ -125,7 +138,9 @@ export default new Vuex.Store({
     },
 
     async initMarket({ commit }) {
-      let marketAddress = Market.networks[2].address;
+      let marketAddress = Market.networks[ChainID.HmyMainnet].address;
+      const addr = new HarmonyAddress(marketAddress);
+      console.log(addr, 'address');
       if (marketAddress) {
         let market = hmy.contracts.createContract(Market.abi, marketAddress);
         commit('setMarket', { market });
@@ -147,7 +162,8 @@ export default new Vuex.Store({
                 id: id.toNumber(),
                 price: parseInt(itemInfo[0]) / 10 ** 18,
                 imageUrl: itemInfo[2],
-                itemType: parseInt(itemInfo[3])
+                itemType: parseInt(itemInfo[3]),
+                name: itemInfo[4]
               };
               return item;
             })
@@ -196,7 +212,8 @@ export default new Vuex.Store({
                 id: id.toNumber(),
                 price: parseInt(itemInfo[0]) / 10 ** 18,
                 imageUrl: itemInfo[2],
-                itemType: parseInt(itemInfo[3])
+                itemType: parseInt(itemInfo[3]),
+                name: itemInfo[4]
               };
               return item;
             })

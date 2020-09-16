@@ -3,6 +3,7 @@ import "./Point.sol";
 
 contract Market {
     struct Item {
+        string name;
         uint256 price;
         address owner;
         string imageUrl;
@@ -21,7 +22,7 @@ contract Market {
     }
 
     Point public pointContract;
-    address public managerAddress;
+    address payable public managerAddress;
     uint256 public buyBackRate;
     uint256 public interestRate;
 
@@ -116,11 +117,18 @@ contract Market {
             uint256,
             address,
             string memory,
-            uint256
+            uint256,
+            string memory
         )
     {
         Item storage item = items[_id];
-        return (item.price, item.owner, item.imageUrl, item.itemType);
+        return (
+            item.price,
+            item.owner,
+            item.imageUrl,
+            item.itemType,
+            item.name
+        );
     }
 
     function itemsOf(address _owner) public view returns (uint256[] memory) {
@@ -132,6 +140,7 @@ contract Market {
     }
 
     function sell(
+        string memory _name,
         uint256 _price,
         address _owner,
         string memory _imageUrl,
@@ -139,7 +148,7 @@ contract Market {
     ) public {
         require(0 <= _itemType && _itemType <= 4, "Item type must in 0 -> 4");
 
-        items.push(Item(_price, _owner, _imageUrl, _itemType, true));
+        items.push(Item(_name, _price, _owner, _imageUrl, _itemType, true));
         sellingItems.push(items.length - 1);
         emit Sell(items.length - 1, _price, _owner);
     }
@@ -161,7 +170,7 @@ contract Market {
         Balance storage balance = userBalance[msg.sender];
         uint256 currentPoint = pointContract.balanceOf(msg.sender);
         balance.currentFund +=
-            (((block.timestamp - balance.timeStart) / (1 days)) *
+            (((block.timestamp - balance.timeStart) / (1 minutes)) *
                 interestRate *
                 currentPoint) /
             100;
@@ -183,7 +192,7 @@ contract Market {
         uint256 currentPoint = pointContract.balanceOf(account);
 
         uint256 withdrawableStake = balance.currentFund +
-            (((block.timestamp - balance.timeStart) / (1 days)) *
+            (((block.timestamp - balance.timeStart) / (1 minutes)) *
                 interestRate *
                 currentPoint) /
             100;
@@ -205,7 +214,7 @@ contract Market {
         uint256 currentPoint = pointContract.balanceOf(msg.sender);
 
         uint256 withdrawableStake = balance.currentFund +
-            (((block.timestamp - balance.timeStart) / (1 days)) *
+            (((block.timestamp - balance.timeStart) / (1 minutes)) *
                 interestRate *
                 currentPoint) /
             100;
@@ -237,5 +246,9 @@ contract Market {
                 break;
             }
         }
+    }
+
+    function withdraw() public onlyManager {
+        managerAddress.transfer(address(this).balance);
     }
 }

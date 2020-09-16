@@ -1,5 +1,5 @@
 <template>
-  <div class="content-account">
+  <div class="content-account" v-loading="loading">
     <header-componet />
 
     <div class="balance-and-points">
@@ -22,7 +22,7 @@
         >
       </el-row>
     </div>
-    <div class="cashback" v-loading="loading">
+    <div class="cashback">
       <div class="box-cashback">
         <h3>Interest</h3>
         <div class="arrow-top">
@@ -92,8 +92,8 @@ const options = {
   gasLimit: GAS_LIMIT
 };
 
-const hmy = new Harmony('https://api.s0.b.hmny.io', {
-  chainID: ChainID.HmyTestnet,
+const hmy = new Harmony('https://api.s0.t.hmny.io', {
+  chainID: ChainID.HmyMainnet,
   chainType: ChainType.Harmony
 });
 
@@ -174,6 +174,7 @@ export default {
             .withdrawStake((this.sliderValue * 10 ** 18).toString())
             .send({ ...options })
             .then(e => {
+              this.sliderValue = 0;
               this.loading = false;
               this.$message({
                 message: e.transaction.id,

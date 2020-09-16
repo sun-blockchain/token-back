@@ -47,8 +47,9 @@ export default {
   computed: {
     ...mapState(['account']),
     showAddress() {
-      let result =
-        this.address.substring(0, 3) + '...' + this.address.substring(this.address.length - 4);
+      let result = this.address
+        ? this.address.substring(0, 3) + '...' + this.address.substring(this.address.length - 4)
+        : '...';
       return result;
     }
   },
@@ -57,7 +58,7 @@ export default {
   },
   async created() {
     await this.loadWallet();
-    this.address = this.account.address;
+    this.address = this.account ? this.account.address : '';
   }
 };
 </script>

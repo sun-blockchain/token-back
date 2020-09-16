@@ -11,16 +11,16 @@ const options = {
   gasPrice: GAS_PRICE
 };
 
-const hmy = new Harmony('https://api.s0.b.hmny.io', {
-  chainID: ChainID.HmyTestnet,
+const hmy = new Harmony('https://api.s0.t.hmny.io', {
+  chainID: ChainID.HmyMainnet,
   chainType: ChainType.Harmony
 });
 
 const pointJson = require('../contracts/Point.json');
 
-const pointAddress = pointJson.networks['2'].address;
+const pointAddress = pointJson.networks[ChainID.HmyMainnet].address;
 
-let marketAddress = Market.networks[2].address;
+let marketAddress = Market.networks[ChainID.HmyMainnet].address;
 
 let market = hmy.contracts.createContract(Market.abi, marketAddress);
 

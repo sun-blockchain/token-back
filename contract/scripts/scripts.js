@@ -10,23 +10,23 @@ const options = {
   gasPrice: GAS_PRICE
 };
 
-const hmy = new Harmony(process.env.TESTNET_0_URL, {
-  chainID: ChainID.HmyTestnet,
+const hmy = new Harmony(process.env.MAINNET_0_URL, {
+  chainId: ChainID.HmyMainnet,
   chainType: ChainType.Harmony
 });
 
 const pointJson = require('../../client/src/contracts/Point.json');
 const marketJson = require('../../client/src/contracts/Market.json');
 
-const pointAddress = pointJson.networks['2'].address;
-const marketAddress = marketJson.networks['2'].address;
+const pointAddress = pointJson.networks[ChainID.HmyMainnet].address;
+const marketAddress = marketJson.networks[ChainID.HmyMainnet].address;
 // console.log(pointAddress);
 
 exports.mintPoint = async function (oneAddress, amount) {
   try {
     let address = hmy.crypto.getAddress(oneAddress).checksum;
     const point = hmy.contracts.createContract(pointJson.abi, pointAddress);
-    point.wallet.addByPrivateKey(process.env.TESTNET_PRIVATE_KEY);
+    point.wallet.addByPrivateKey(process.env.MAINNET_PRIVATE_KEY);
 
     const mintTx = hmy.transactions.newTx({
       to: pointAddress
@@ -49,12 +49,12 @@ exports.mintPoint = async function (oneAddress, amount) {
   process.exit();
 };
 
-exports.createItem = async function (price, oneAddress, imageUrl, itemType) {
+exports.createItem = async function (name, price, oneAddress, imageUrl, itemType) {
   try {
     let address = hmy.crypto.getAddress(oneAddress).checksum;
     console.log('hmy', address);
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
-    market.wallet.addByPrivateKey(process.env.TESTNET_PRIVATE_KEY);
+    market.wallet.addByPrivateKey(process.env.MAINNET_PRIVATE_KEY);
 
     const sellTx = hmy.transactions.newTx({
       to: marketAddress
@@ -62,7 +62,7 @@ exports.createItem = async function (price, oneAddress, imageUrl, itemType) {
 
     await market.wallet.signTransaction(sellTx);
     await market.methods
-      .sell(price, address, imageUrl, itemType)
+      .sell(name, price, address, imageUrl, itemType)
       .send(options)
       .then(result => {
         // console.log(result);
@@ -104,7 +104,7 @@ exports.getAllItems = async function () {
 exports.buyItem = async function (itemId, price) {
   try {
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
-    market.wallet.addByPrivateKey(process.env.USER1_PRIVATE_KEY);
+    market.wallet.addByPrivateKey(process.env.MAINNET_PRIVATE_KEY);
 
     const buyTx = hmy.transactions.newTx({
       to: marketAddress
@@ -157,7 +157,7 @@ exports.getWithdrawableStake = async function (oneAddress) {
 exports.withdrawStake = async function (amount) {
   try {
     const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
-    market.wallet.addByPrivateKey(process.env.USER1_PRIVATE_KEY);
+    market.wallet.addByPrivateKey(process.env.MAINNET_PRIVATE_KEY);
 
     const withdrawTx = hmy.transactions.newTx({
       to: marketAddress
@@ -219,9 +219,9 @@ exports.getBuyerItems = async function (oneAddress) {
 };
 
 exports.setupItems = async function (items) {
-  const address = hmy.crypto.getAddress(process.env.TESTNET_ADDRESS).checksum;
+  const address = hmy.crypto.getAddress(process.env.MAINNET_ADDRESS).checksum;
   const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
-  market.wallet.addByPrivateKey(process.env.TESTNET_PRIVATE_KEY);
+  market.wallet.addByPrivateKey(process.env.MAINNET_PRIVATE_KEY);
 
   const sellTx = hmy.transactions.newTx({
     to: marketAddress
@@ -230,7 +230,7 @@ exports.setupItems = async function (items) {
 
   for (let i = 0; i < items.length; i++) {
     await market.methods
-      .sell(items[i].price, address, items[i].imageUrl, items[i].itemType)
+      .sell(items[i].name, items[i].price, address, items[i].imageUrl, items[i].itemType)
       .send(options)
       .then(result => {
         // console.log(result);
@@ -269,10 +269,38 @@ exports.getPointBalance = async function (oneAddress) {
   }
 };
 
+exports.withdraw = async function () {
+  try {
+    const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
+    market.wallet.addByPrivateKey(process.env.MAINNET_PRIVATE_KEY);
+
+    const withdrawTx = hmy.transactions.newTx({
+      to: marketAddress
+    });
+
+    await market.wallet.signTransaction(withdrawTx);
+    await market.methods
+      .withdraw()
+      .send({ ...options })
+      .then(result => {
+        // console.log(result);
+        console.log('Withdraw successfully!');
+      })
+      .catch(error => {
+        console.log('Withdraw error', error);
+      });
+    return;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 // this.mintPoint(process.env.USER1_ADDRESS, '1000000000000000000');
 // this.createItem(
+//   'Shirt 01',
 //   '200000000000000000',
-//   process.env.TESTNET_ADDRESS,
+//   process.env.MAINNET_ADDRESS,
 //   'https://kathmandu.imgix.net/catalog/product/1/5/15108_605_federatewomenslsshirt_v2_a.jpg',
 //   0
 // );
@@ -287,3 +315,4 @@ exports.getPointBalance = async function (oneAddress) {
 // this.withdrawStake(344000000000000);
 // this.getOneBalance('one12j4ycvnta3l68ep28lpe73n20wx470yfzq9uf3');
 // this.getPointBalance('one12j4ycvnta3l68ep28lpe73n20wx470yfzq9uf3');
+// this.withdraw();

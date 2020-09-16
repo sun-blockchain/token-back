@@ -7,7 +7,7 @@
           <div class="row">
             <div class="col-12 col-sm-6 col-md-4" :span="6" v-for="item in itemsOf" :key="item.id">
               <ItemComponent
-                name="Shirt"
+                :name="item.name"
                 :price="item.price"
                 :itemImg="item.imageUrl"
                 :id="item.id"
