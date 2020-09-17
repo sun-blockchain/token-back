@@ -6,7 +6,7 @@
       </div>
     </el-image>
     <div class="bottom-card">
-      <p>{{ name ? name : type ? showName(type) : 'No Name' }}</p>
+      <p>{{ name ? name : 'No Name' }}</p>
       <h5>{{ price }} ONE</h5>
       <div class="bottom clearfix" v-if="!myProduct">
         <el-button type="primary" class="btn-buy" @click="buyProduct"
@@ -38,29 +38,6 @@ export default {
     },
     myProduct: {
       type: Boolean
-    }
-  },
-  computed: {
-    showName(type) {
-      let name = '';
-      switch (type) {
-        case 0:
-          name = 'Shirt';
-          break;
-        case 1:
-          name = 'T-shirt';
-          break;
-        case 2:
-          name = 'Jeans';
-          break;
-        case 3:
-          name = 'Shoes';
-          break;
-        case 4:
-          name = 'Hat';
-          break;
-      }
-      return name;
     }
   },
   methods: {
