@@ -1,5 +1,6 @@
 pragma solidity ^0.5.0;
 import "./Point.sol";
+import "@chainlink/contracts/src/v0.5/interfaces/AggregatorV3Interface.sol";
 
 contract Market {
     struct Item {
@@ -30,6 +31,10 @@ contract Market {
     Item[] public items;
     mapping(address => uint256[]) public buyerItems;
     mapping(address => Balance) public userBalance;
+
+    /** Price of ONE
+     */
+    AggregatorV3Interface internal priceFeed;
 
     //EVENT
 
@@ -64,7 +69,8 @@ contract Market {
     }
 
     //FUNCTION
-    constructor() public {
+    constructor(address oracle) public {
+        priceFeed = AggregatorV3Interface(oracle);
         managerAddress = msg.sender;
     }
 
@@ -248,6 +254,23 @@ contract Market {
         }
     }
 
+    /** Feed price of ONE/USD
+     */
+    function getLatestPrice() public returns (int256) {
+        (
+            uint80 roundID,
+            int256 price,
+            uint256 startedAt,
+            uint256 timeStamp,
+            uint80 answeredInRound
+        ) = priceFeed.latestRoundData();
+        // If the round is not complete yet, timestamp is 0
+        require(timeStamp > 0, "Round not complete");
+        return int256(price);
+    }
+
+    /** Function withdraw ONE to account Manager
+     */
     function withdraw() public onlyManager {
         managerAddress.transfer(address(this).balance);
     }

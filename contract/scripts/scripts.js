@@ -10,16 +10,16 @@ const options = {
   gasPrice: GAS_PRICE
 };
 
-const hmy = new Harmony(process.env.MAINNET_0_URL, {
-  chainId: ChainID.HmyMainnet,
+const hmy = new Harmony(process.env.TESTNET_0_URL, {
+  chainId: ChainID.HmyTestnet,
   chainType: ChainType.Harmony
 });
 
 const pointJson = require('../../client/src/contracts/Point.json');
 const marketJson = require('../../client/src/contracts/Market.json');
 
-const pointAddress = pointJson.networks[ChainID.HmyMainnet].address;
-const marketAddress = marketJson.networks[ChainID.HmyMainnet].address;
+const pointAddress = pointJson.networks[ChainID.HmyTestnet].address;
+const marketAddress = marketJson.networks[ChainID.HmyTestnet].address;
 // console.log(pointAddress);
 
 exports.mintPoint = async function (oneAddress, amount) {
@@ -295,6 +295,20 @@ exports.withdraw = async function () {
     return error;
   }
 };
+
+exports.fetchPriceONE_USD = async function () {
+  try {
+    const market = hmy.contracts.createContract(marketJson.abi, marketAddress);
+    let price = await market.methods.getLatestPrice().call(options);
+    console.log(price);
+    return price;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+this.fetchPriceONE_USD();
 
 // this.mintPoint(process.env.USER1_ADDRESS, '1000000000000000000');
 // this.createItem(
