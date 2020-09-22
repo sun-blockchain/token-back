@@ -170,7 +170,7 @@ contract Market {
         Balance storage balance = userBalance[msg.sender];
         uint256 currentPoint = pointContract.balanceOf(msg.sender);
         balance.currentFund +=
-            (((block.timestamp - balance.timeStart) / (1 minutes)) *
+            (((block.timestamp - balance.timeStart) / (1 days)) *
                 interestRate *
                 currentPoint) /
             100;
@@ -192,7 +192,7 @@ contract Market {
         uint256 currentPoint = pointContract.balanceOf(account);
 
         uint256 withdrawableStake = balance.currentFund +
-            (((block.timestamp - balance.timeStart) / (1 minutes)) *
+            (((block.timestamp - balance.timeStart) / (1 days)) *
                 interestRate *
                 currentPoint) /
             100;
@@ -214,7 +214,7 @@ contract Market {
         uint256 currentPoint = pointContract.balanceOf(msg.sender);
 
         uint256 withdrawableStake = balance.currentFund +
-            (((block.timestamp - balance.timeStart) / (1 minutes)) *
+            (((block.timestamp - balance.timeStart) / (1 days)) *
                 interestRate *
                 currentPoint) /
             100;
